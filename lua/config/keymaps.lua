@@ -1,8 +1,7 @@
 -- Keymaps are automatically loaded on the VeryLazy event
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
-
--- é”®ç›˜æ˜ å°„è®¾ç½®
+-- ¼üÅÌÓ³ÉäÉèÖÃ
 local mappings = {
   n = {
     ["W"] = { "5w", desc = "Select 5 words forward" },
@@ -29,22 +28,7 @@ local mappings = {
   },
 }
 
-local utils = require("utils")
-local is_available = utils.is_available
-
--- Comment
-if is_available("Comment.nvim") then
-  mappings.n["<leader>tc"] = {
-    function()
-      require("Comment.api").toggle.linewise.count(vim.v.count > 0 and vim.v.count or 1)
-    end,
-    desc = "Comment line",
-  }
-  mappings.v["<leader>tc"] =
-    { "<esc><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<cr>", desc = "Toggle comment line" }
-end
-
--- éå† mappings è¡¨ï¼Œè®¾ç½®é”®ç›˜æ˜ å°„
+-- ±éÀú mappings ±í£¬ÉèÖÃ¼üÅÌÓ³Éä
 for mode, map in pairs(mappings) do
   for lhs, rhs in pairs(map) do
     local desc = rhs.desc or ""
