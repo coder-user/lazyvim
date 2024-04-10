@@ -1,5 +1,5 @@
 return {
-  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+  { "Mofiqul/dracula.nvim" },
   {
     "echasnovski/mini.indentscope",
     event = { "BufReadPre", "BufNewFile" },

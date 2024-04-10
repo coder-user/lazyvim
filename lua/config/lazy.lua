@@ -43,6 +43,9 @@ require("lazy").setup({
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
   install = { colorscheme = { "tokyonight", "habamax", "neodark", "catppuccin" } },
+  opts = {
+    colorscheme = "dracula",
+  },
   checker = { enabled = true }, -- automatically check for plugin updates
   performance = {
     rtp = {
