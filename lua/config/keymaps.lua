@@ -16,7 +16,18 @@ local mappings = {
     ["<F7>"] = { "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
   },
 }
-
+-- vim.keymap.set(
+--   { "n", "i", "v", "x" },
+--   "te",
+--   '<CMD>lua require("code.telescope-customcmd").showCommandBar()<CR>',
+--   { desc = "customcmd action" }
+-- )
+vim.keymap.set(
+  { "n", "i", "v", "x" },
+  "<A-CR>",
+  '<CMD>lua require("code.telescope-customcmd").showCommandBar()<CR>',
+  { desc = "customcmd action" }
+)
 -- ["Y"] = { '"+y', desc = "Copy selection to system clipboard" },
 
 for mode, map in pairs(mappings) do
