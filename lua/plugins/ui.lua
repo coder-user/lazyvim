@@ -14,4 +14,386 @@ return {
       },
     },
   },
+  -- 透明度
+  {
+    "xiyaowong/transparent.nvim",
+    enabled = false,
+    event = "VeryLazy",
+    config = function()
+      local ts = require("transparent")
+      ts.clear_prefix("BufferLine")
+      ts.clear_prefix("NeoTree")
+      -- ts.clear_prefix("lualine")
+      ts.setup({ -- Optional, you don't have to run setup.
+        groups = { -- table: default groups
+          "Normal",
+          "NormalNC",
+          "Comment",
+          "Constant",
+          "Special",
+          "Identifier",
+          "Statement",
+          "PreProc",
+          "Type",
+          "Underlined",
+          "Todo",
+          "String",
+          "Function",
+          "Conditional",
+          "Repeat",
+          "Operator",
+          "Structure",
+          "LineNr",
+          "NonText",
+          "SignColumn",
+          -- "CursorLine",
+          "CursorLineNr",
+          "StatusLine",
+          "StatusLineNC",
+          "EndOfBuffer",
+        },
+        extra_groups = { "" }, -- table: additional groups that should be cleared
+        exclude_groups = {}, -- table: groups you don't want to clear
+      })
+    end,
+  },
+  {
+    "kevinhwang91/nvim-ufo",
+    event = "BufReadPost",
+    enabled = true,
+    dependencies = { "kevinhwang91/promise-async", "nvim-treesitter/nvim-treesitter", "luukvbaal/statuscol.nvim" },
+    config = function()
+      vim.o.foldcolumn = "0" -- '0' is not bad
+      vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+      vim.o.foldlevelstart = 99
+      vim.o.foldenable = false
+      vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
+      vim.keymap.set("n", "zO", require("ufo").openAllFolds)
+      vim.keymap.set("n", "zF", require("ufo").closeAllFolds)
+      vim.keymap.set("n", "tk", function()
+        local winid = require("ufo").peekFoldedLinesUnderCursor()
+        if not winid then
+          -- choose one of coc.nvim and nvim lsp
+          vim.lsp.buf.hover()
+        end
+      end)
+
+      local handler = function(virtText, lnum, endLnum, width, truncate)
+        local line = vim.fn.getline(lnum)
+        if line:find("if%s+err%s*!= nil") then
+          local prevLine = vim.api.nvim_buf_get_lines(0, lnum - 2, lnum - 1, false)[1]
+          local indent = string.match(prevLine, "^%s*") or "" -- 获取上一行的缩进
+          local startLine = lnum
+          local endLine = endLnum
+          local lines = vim.api.nvim_buf_get_lines(0, startLine, endLine - 1, false)
+          for i, l in ipairs(lines) do
+            lines[i] = l:gsub("^%s*", ""):gsub("return", "..") -- 去掉开头的空格
+          end
+          local newText = indent .. table.concat(lines, "; ")
+          virtText = { { newText, "@comment" } }
+          return virtText
+        end
+        if line:find("if%s+[^;]+;[^;]+!= nil") then
+          -- local startLine = lnum
+          -- local endLine = endLnum
+          -- local content = table.concat(vim.api.nvim_buf_get_lines(0, startLine, endLine - 1, false), "")
+          local startLine = lnum
+          local endLine = endLnum
+          local lines = vim.api.nvim_buf_get_lines(0, startLine, endLine - 1, false)
+          for i, l in ipairs(lines) do
+            lines[i] = l:gsub("^%s*", "")
+          end
+          local content = table.concat(lines, "; ")
+
+          local newVirtText = {}
+          -- local suffix = ('  %d '):format(endLnum - lnum)
+          local suffix = " ? " .. content
+          local sufWidth = vim.fn.strdisplaywidth(suffix)
+          local targetWidth = width - sufWidth
+          local curWidth = 0
+          local errCount = 0
+          for _, chunk in ipairs(virtText) do
+            local chunkText = chunk[1]
+            local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+
+            if targetWidth > curWidth + chunkWidth then
+              -- chunkText = chunkText:gsub("!=", "")
+              if chunkText == "err" then
+                errCount = errCount + 1
+                if errCount ~= 2 then
+                  table.insert(newVirtText, { chunkText, chunk[2] })
+                end
+              end
+
+              if
+                chunkText ~= ";"
+                and chunkText ~= "err"
+                and chunkText ~= "!="
+                and chunkText ~= "nil"
+                and chunkText ~= "{"
+                and chunkText ~= "if"
+                and chunkText ~= " "
+              then
+                if chunkText == ":=" or chunkText == "=" then
+                  chunkText = " " .. chunkText .. " "
+                  table.insert(newVirtText, { chunkText, chunk[2] })
+                elseif chunkText == "," then
+                  chunkText = "," .. " "
+                  table.insert(newVirtText, { chunkText, chunk[2] })
+                else
+                  table.insert(newVirtText, { chunkText, chunk[2] })
+                end
+              end
+            end
+            curWidth = curWidth + vim.fn.strdisplaywidth(chunkText)
+          end
+          -- newVirtText = newVirtText:gsub("if ", ""):gsub("; err != nil {", "")
+          table.insert(newVirtText, { suffix, "k.bracket" })
+          return newVirtText
+        end
+
+        local newVirtText = {}
+        -- local suffix = ('  %d '):format(endLnum - lnum)
+        local suffix = ("...%d "):format(endLnum - lnum)
+        local sufWidth = vim.fn.strdisplaywidth(suffix)
+        local targetWidth = width - sufWidth
+        local curWidth = 0
+        for _, chunk in ipairs(virtText) do
+          local chunkText = chunk[1]
+          local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+          if targetWidth > curWidth + chunkWidth then
+            table.insert(newVirtText, chunk)
+          else
+            chunkText = truncate(chunkText, targetWidth - curWidth)
+            local hlGroup = chunk[2]
+            table.insert(newVirtText, { chunkText, hlGroup })
+            chunkWidth = vim.fn.strdisplaywidth(chunkText)
+            -- str width returned from truncate() may less than 2nd argument, need padding
+            if curWidth + chunkWidth < targetWidth then
+              suffix = suffix .. (" "):rep(targetWidth - curWidth - chunkWidth)
+            end
+            break
+          end
+          curWidth = curWidth + vim.fn.strdisplaywidth(chunkText)
+        end
+        table.insert(newVirtText, { suffix, "k.bracket" })
+
+        return newVirtText
+      end
+
+      -- local capabilities = vim.lsp.protocol.make_client_capabilities()
+      -- capabilities.textDocument.foldingRange = {
+      -- 	dynamicRegistration = false,
+      -- 	lineFoldingOnly = true
+      -- }
+      -- local language_servers = require("lspconfig").util.available_servers() -- or list servers manually like {'gopls', 'clangd'}
+      -- for _, ls in ipairs(language_servers) do
+      -- 	require('lspconfig')[ls].setup({
+      -- 		capabilities = capabilities
+      -- 		-- you can add other fields for setting up lsp server in this table
+      -- 	})
+      -- end
+
+      require("ufo").setup({
+        provider_selector = function(bufnr, filetype, buftype)
+          return { "treesitter", "indent" }
+        end,
+        fold_virt_text_handler = handler,
+        open_fold_hl_timeout = 150,
+        close_fold_kinds_ft = { "imports", "comment" },
+        preview = {
+          win_config = {
+            border = { "", "─", "", "", "", "─", "", "" },
+            winhighlight = "Normal:Folded",
+            winblend = 0,
+          },
+          mappings = {
+            scrollU = "<C-u>",
+            scrollD = "<C-d>",
+            jumpTop = "[",
+            jumpBot = "]",
+          },
+        },
+      })
+    end,
+  },
+  {
+    "luukvbaal/statuscol.nvim",
+    enabled = false,
+    event = "VeryLazy",
+    config = function()
+      local builtin = require("statuscol.builtin")
+      require("statuscol").setup({
+        relculright = true,
+        segments = {
+          { text = { builtin.foldfunc }, click = "v:lua.ScFa" },
+          { text = { "%s" }, click = "v:lua.ScSa" },
+          { text = { builtin.lnumfunc, " " }, click = "v:lua.ScLa" },
+        },
+      })
+    end,
+  },
+  {
+    "nvim-lualine/lualine.nvim",
+    requires = { "nvim-tree/nvim-web-devicons", opt = true },
+    event = "BufRead",
+    config = function()
+      local colors = {
+        red = "#e965a5",
+        green = "#b1f2a7",
+        yellow = "#ebde76",
+        blue = "#b1baf4",
+        purple = "#e192ef",
+        cyan = "#b3f4f3",
+        white = "#eee9fc",
+        black = "#282433",
+        selection = "#282433",
+        comment = "#938aad",
+        bg = "#312c2b",
+      }
+
+      local hardhacker_theme = {
+        normal = {
+          a = { fg = colors.black, bg = colors.green },
+          b = { fg = colors.cyan, bg = colors.bg },
+          c = { fg = colors.yellow, bg = colors.bg },
+        },
+
+        insert = { a = { fg = colors.black, bg = colors.red } },
+        visual = { a = { fg = colors.black, bg = colors.yellow } },
+        replace = { a = { fg = colors.black, bg = colors.red } },
+
+        inactive = {
+          a = { fg = colors.white, bg = colors.selection },
+          b = { fg = colors.white, bg = colors.selection },
+          c = { fg = colors.white, bg = colors.selection },
+        },
+
+        command = {
+          a = { fg = colors.black, bg = colors.blue },
+          b = { fg = colors.cyan, bg = colors.selection },
+          c = { fg = colors.yellow, bg = colors.selection },
+        },
+      }
+
+      require("lualine").setup({
+        options = {
+          icons_enabled = true,
+          -- theme = hardhacker_theme,
+          theme = "dracula",
+          -- component_separators = { left = "░", right = "░" },
+          component_separators = "|",
+          section_separators = { left = "", right = "" },
+          disabled_filetypes = {
+            statusline = {},
+            winbar = {},
+          },
+          ignore_focus = {},
+          always_divide_middle = true,
+          globalstatus = true,
+          refresh = {
+            statusline = 1000,
+            tabline = 1000,
+            winbar = 1000,
+          },
+        },
+        sections = {
+          lualine_a = {
+            {
+              "mode",
+              separator = { left = "                                    " },
+              right_padding = 2,
+            },
+          },
+          lualine_b = {
+            { "branch" },
+            { "diff" },
+          },
+          lualine_c = {
+            {
+              "filename",
+              file_status = true, -- Displays file status (readonly status, modified status)
+              newfile_status = false, -- Display new file status (new file means no write after created)
+              path = 1, -- 0: Just the filename
+              -- 1: Relative path
+              -- 2: Absolute path
+              -- 3: Absolute path, with tilde as the home directory
+              -- 4: Filename and parent dir, with tilde as the home directory
+
+              shorting_target = 70, -- Shortens path to leave 40 spaces in the window
+              -- for other components. (terrible name, any suggestions?)
+              symbols = {
+                modified = "[+]", -- Text to show when the file is modified.
+                readonly = "[-]", -- Text to show when the file is non-modifiable or readonly.
+                unnamed = "[No Name]", -- Text to show for unnamed buffers.
+                newfile = "[New]", -- Text to show for newly created file before first write
+              },
+            },
+          },
+          lualine_x = {
+            {
+              require("noice").api.status.command.get,
+              cond = require("noice").api.status.command.has,
+              color = { fg = colors.yellow },
+            },
+            {
+              require("noice").api.status.search.get,
+              cond = require("noice").api.status.search.has,
+              color = { fg = colors.yellow },
+            },
+            "encoding",
+            "fileformat",
+            "filetype",
+            "filesize",
+          },
+          lualine_y = {
+            "progress",
+            {
+              "diagnostics",
+
+              -- Table of diagnostic sources, available sources are:
+              --   'nvim_lsp', 'nvim_diagnostic', 'nvim_workspace_diagnostic', 'coc', 'ale', 'vim_lsp'.
+              -- or a function that returns a table as such:
+              --   { error=error_cnt, warn=warn_cnt, info=info_cnt, hint=hint_cnt }
+              sources = { "nvim_lsp", "nvim_diagnostic" },
+
+              -- Displays diagnostics for the defined severity types
+              sections = { "error", "warn", "info", "hint" },
+
+              diagnostics_color = {
+                -- Same values as the general color option can be used here.
+                error = "DiagnosticError", -- Changes diagnostics' error color.
+                warn = "DiagnosticWarn", -- Changes diagnostics' warn color.
+                info = "DiagnosticInfo", -- Changes diagnostics' info color.
+                hint = "DiagnosticHint", -- Changes diagnostics' hint color.
+              },
+              symbols = { error = " ", warn = " ", info = " ", hint = " " },
+              colored = true, -- Displays diagnostics status in color if set to true.
+              update_in_insert = false, -- Update diagnostics in insert mode.
+              always_visible = false, -- Show diagnostics even if there are none.
+            },
+          },
+          lualine_z = {
+            {
+              "location",
+              separator = { right = "                                  " },
+              left_padding = 2,
+            },
+          },
+        },
+        inactive_sections = {
+          lualine_a = {},
+          lualine_b = {},
+          lualine_c = { "filename" },
+          lualine_x = { "location" },
+          lualine_y = {},
+          lualine_z = {},
+        },
+        tabline = {},
+        winbar = {},
+        inactive_winbar = {},
+        extensions = {},
+      })
+    end,
+  },
 }

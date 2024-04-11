@@ -16,18 +16,23 @@ local mappings = {
     ["<F7>"] = { "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
   },
 }
--- vim.keymap.set(
---   { "n", "i", "v", "x" },
---   "te",
---   '<CMD>lua require("code.telescope-customcmd").showCommandBar()<CR>',
---   { desc = "customcmd action" }
--- )
-vim.keymap.set(
-  { "n", "i", "v", "x" },
-  "<A-CR>",
-  '<CMD>lua require("code.telescope-customcmd").showCommandBar()<CR>',
-  { desc = "customcmd action" }
-)
+
+-- 定义一个自动命令组，以便于后续清理
+vim.api.nvim_create_augroup("GoFileType", { clear = true })
+-- 自动命令，对 Go 文件设置快捷键
+vim.api.nvim_create_autocmd("FileType", {
+  group = "GoFileType",
+  pattern = "go",
+  callback = function()
+    vim.keymap.set(
+      { "n", "i", "v", "x" },
+      "<A-CR>",
+      '<CMD>lua require("code.telescope-customcmd").showCommandBar()<CR>',
+      { desc = "customcmd action", buffer = true }
+    )
+  end,
+})
+
 -- ["Y"] = { '"+y', desc = "Copy selection to system clipboard" },
 
 for mode, map in pairs(mappings) do
