@@ -61,4 +61,12 @@ return {
       require("telescope").load_extension("goimpl")
     end,
   },
+  {
+    "nvim-telescope/telescope.nvim",
+    cmd = "Telescope",
+    version = false, -- telescope did only one release, so use HEAD for now
+    keys = {
+      { "<C-S-F>", LazyVim.telescope("live_grep"), desc = "Grep (Root Dir)" },
+    },
+  },
 }

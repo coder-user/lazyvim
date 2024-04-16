@@ -17,7 +17,6 @@ local mappings = {
     ["<C-S-N>"] = { "<cmd>Telescope find_files<CR>", desc = "" },
   },
 }
-
 -- 定义一个自动命令组，以便于后续清理
 vim.api.nvim_create_augroup("GoFileType", { clear = true })
 -- 自动命令，对 Go 文件设置快捷键
@@ -33,8 +32,6 @@ vim.api.nvim_create_autocmd("FileType", {
     )
   end,
 })
-
--- ["Y"] = { '"+y', desc = "Copy selection to system clipboard" },
 
 for mode, map in pairs(mappings) do
   for lhs, rhs in pairs(map) do
