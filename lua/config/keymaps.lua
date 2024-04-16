@@ -6,14 +6,15 @@ local mappings = {
   n = {
     ["J"] = { "6j", desc = "" },
     ["K"] = { "6k", desc = "" },
-    ["<F7>"] = { "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
+    ["<C-S-N>"] = { "<cmd>Telescope find_files<CR>", desc = "" },
   },
   v = {
     ["J"] = { "6j", desc = "" },
     ["K"] = { "6k", desc = "" },
+    ["<C-S-N>"] = { "<cmd>Telescope find_files<CR>", desc = "" },
   },
-  t = {
-    ["<F7>"] = { "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
+  i = {
+    ["<C-S-N>"] = { "<cmd>Telescope find_files<CR>", desc = "" },
   },
 }
 
