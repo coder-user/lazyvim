@@ -8,6 +8,14 @@ local M = {}
 
 local commands = {
   {
+    name = "GoCodeAction",
+    category = "go",
+    description = "代码操作",
+    action = function()
+      vim.cmd([[GoCodeAction]])
+    end,
+  },
+  {
     name = "GoImpl",
     category = "go",
     description = "实现接口",
@@ -37,14 +45,6 @@ local commands = {
     description = "测试当前函数",
     action = function()
       vim.cmd([[lua require('dap-go').debug_test()]])
-    end,
-  },
-  {
-    name = "GoCodeAction",
-    category = "go",
-    description = "代码操作",
-    action = function()
-      vim.cmd([[GoCodeAction]])
     end,
   },
   {
