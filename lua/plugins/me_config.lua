@@ -11,4 +11,7 @@ return {
       keys[#keys + 1] = { "K", false }
     end,
   },
+  {
+    "mg979/vim-visual-multi",
+  },
 }
