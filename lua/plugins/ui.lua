@@ -413,7 +413,7 @@ return {
 
       local opts = {
         theme = "doom",
-        -- theme = 'hyper'
+        -- theme = "hyper",
         hide = {
           -- this is taken care of by lualine
           -- enabling this messes up the actual laststatus setting after loading a file
@@ -421,6 +421,10 @@ return {
         },
         config = {
           header = vim.split(logo, "\n"),
+          -- week_header = {
+          --   enable = true,
+          -- },
+          -- packages = { enabled = true },
 
           -- stylua: ignore
           center = {
