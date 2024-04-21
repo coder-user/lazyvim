@@ -6,11 +6,15 @@ local mappings = {
   n = {
     ["J"] = { "6j", desc = "" },
     ["K"] = { "6k", desc = "" },
+    ["H"] = { "6h", desc = "" },
+    ["L"] = { "6l", desc = "" },
     ["<C-S-N>"] = { "<cmd>Telescope find_files<CR>", desc = "" },
   },
   v = {
     ["J"] = { "6j", desc = "" },
     ["K"] = { "6k", desc = "" },
+    ["H"] = { "6h", desc = "" },
+    ["L"] = { "6l", desc = "" },
     ["<C-S-N>"] = { "<cmd>Telescope find_files<CR>", desc = "" },
   },
   i = {
