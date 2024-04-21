@@ -112,7 +112,7 @@ return {
         nls.builtins.code_actions.refactoring,
         -- nls.builtins.formatting.goimports,
         nls.builtins.formatting.gofumpt,
-        nls.builtins.formatting.ggoimports_reviseroimports_reviser.with({
+        nls.builtins.formatting.goimports_reviser.with({
           -- 配置 goimports-reviser 参数
           extra_args = { "-imports-order", "std,project,general,company" },
         }),
