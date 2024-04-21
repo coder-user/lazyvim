@@ -30,10 +30,11 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     vim.keymap.set(
       { "n", "i", "v", "x" },
-      "<A-CR>",
+      "<A-S-CR>",
       '<CMD>lua require("code.telescope-customcmd").showCommandBar()<CR>',
       { desc = "customcmd action", buffer = true }
     )
+    vim.keymap.set({ "n", "i", "v", "x" }, "<A-CR>", "<CMD>GoCodeAction<CR>", { desc = "go action", buffer = true })
   end,
 })
 
