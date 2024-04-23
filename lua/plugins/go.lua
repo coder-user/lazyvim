@@ -118,7 +118,7 @@ return {
         }),
         nls.builtins.formatting.golines.with({
           -- 配置 golines 参数
-          extra_args = { "-m", "120" },
+          extra_args = { "-m", "128" },
         }),
       })
     end,
