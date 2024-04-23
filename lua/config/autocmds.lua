@@ -8,3 +8,19 @@
 --   command = "silent! wall",
 --   nested = true,
 -- })
+
+-- 默认关闭自动格式化
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  pattern = { "go" },
+  callback = function()
+    vim.b.autoformat = false
+  end,
+})
+
+-- 退出文件前进行格式化
+vim.api.nvim_create_autocmd("BufLeave", {
+  pattern = "*.go",
+  callback = function()
+    require("conform").format({ async = true, lsp_fallback = true })
+  end,
+})
