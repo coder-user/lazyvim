@@ -16,8 +16,9 @@ return {
           cleaning_interval = 1250, -- (milliseconds) automatically clean MsgArea after displaying `message`. See :h MsgArea
         },
         trigger_events = { "InsertLeave" },
-        -- debounce_delay = 3333,
-        debounce_delay = 5000,
+        -- trigger_events = { "InsertLeave", "TextChanged" },
+
+        debounce_delay = 3333,
       })
     end,
   },
