@@ -77,9 +77,18 @@ return {
           end)
         end,
       },
+      {
+        "nvim-telescope/telescope-live-grep-args.nvim",
+        config = function()
+          LazyVim.on_load("telescope.nvim", function()
+            require("telescope").load_extension("live_grep_args")
+          end)
+        end,
+      },
     },
     keys = {
       { "<C-S-F>", LazyVim.telescope("live_grep"), desc = "Grep (Root Dir)" },
+      { "<C-F>", LazyVim.telescope("current_buffer_fuzzy_find"), desc = "Grep (Current file)" },
     },
   },
 }
