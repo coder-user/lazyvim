@@ -4,6 +4,14 @@ end
 
 return {
   {
+    "famiu/bufdelete.nvim",
+    enabled = true,
+    event = "VeryLazy",
+    keys = {
+      { "<leader>wx", "<cmd>Bdelete<cr>", desc = "Close Buffer" },
+    },
+  },
+  {
     "williamboman/mason.nvim",
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
@@ -88,6 +96,7 @@ return {
     },
     keys = {
       { "<C-S-F>", LazyVim.telescope("live_grep"), desc = "Grep (Root Dir)" },
+      { "<C-S-N>", LazyVim.telescope("files"), desc = "Find Files (Root Dir)" },
       { "<C-F>", LazyVim.telescope("current_buffer_fuzzy_find"), desc = "Grep (Current file)" },
     },
   },
