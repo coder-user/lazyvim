@@ -123,16 +123,25 @@ return {
       })
     end,
   },
-  -- {
-  --   "stevearc/conform.nvim",
-  --   optional = true,
-  --   opts = {
-  --     formatters_by_ft = {
-  --       go = { "goimports", "gofumpt" },
-  --       -- go = { "goimports_reviser", "gofumpt" },
-  --     },
-  --   },
-  -- },
+  {
+    "stevearc/conform.nvim",
+    optional = true,
+    opts = {
+      formatters_by_ft = {
+        go = { "golines", "goimports_reviser", "gofumpt" },
+      },
+    },
+    keys = {
+      {
+        "<leader>l",
+        function()
+          require("conform").format({ async = true, lsp_fallback = true })
+        end,
+        mode = "",
+        desc = "Format buffer",
+      },
+    },
+  },
   {
     "mfussenegger/nvim-dap",
     optional = true,
