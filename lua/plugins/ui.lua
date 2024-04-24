@@ -1,5 +1,4 @@
 return {
-  { "Mofiqul/dracula.nvim" },
   {
     "echasnovski/mini.indentscope",
     event = { "BufReadPre", "BufNewFile" },
@@ -14,49 +13,6 @@ return {
       },
     },
   },
-  -- 透明度
-  {
-    "xiyaowong/transparent.nvim",
-    enabled = false,
-    event = "VeryLazy",
-    config = function()
-      local ts = require("transparent")
-      ts.clear_prefix("BufferLine")
-      ts.clear_prefix("NeoTree")
-      -- ts.clear_prefix("lualine")
-      ts.setup({ -- Optional, you don't have to run setup.
-        groups = { -- table: default groups
-          "Normal",
-          "NormalNC",
-          "Comment",
-          "Constant",
-          "Special",
-          "Identifier",
-          "Statement",
-          "PreProc",
-          "Type",
-          "Underlined",
-          "Todo",
-          "String",
-          "Function",
-          "Conditional",
-          "Repeat",
-          "Operator",
-          "Structure",
-          "LineNr",
-          "NonText",
-          "SignColumn",
-          -- "CursorLine",
-          "CursorLineNr",
-          "StatusLine",
-          "StatusLineNC",
-          "EndOfBuffer",
-        },
-        extra_groups = { "" }, -- table: additional groups that should be cleared
-        exclude_groups = {}, -- table: groups you don't want to clear
-      })
-    end,
-  },
   {
     "kevinhwang91/nvim-ufo",
     event = "BufReadPost",
@@ -68,8 +24,11 @@ return {
       vim.o.foldlevelstart = 99
       vim.o.foldenable = false
       vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
-      vim.keymap.set("n", "zO", require("ufo").openAllFolds)
-      vim.keymap.set("n", "zF", require("ufo").closeAllFolds)
+      -- vim.keymap.set("n", "zO", require("ufo").openAllFolds)
+      -- vim.keymap.set("n", "zF", require("ufo").closeAllFolds)
+      -- vim.keymap.set("n", "zf", "zc")
+      -- vim.keymap.set('n', 'to', require('ufo').openFoldsExceptKinds)
+      -- vim.keymap.set('n', 'tt', require('ufo').closeFoldsWith) -- closeAllFolds == closeFoldsWith(0)
       vim.keymap.set("n", "tk", function()
         local winid = require("ufo").peekFoldedLinesUnderCursor()
         if not winid then
@@ -213,22 +172,6 @@ return {
             jumpTop = "[",
             jumpBot = "]",
           },
-        },
-      })
-    end,
-  },
-  {
-    "luukvbaal/statuscol.nvim",
-    enabled = false,
-    event = "VeryLazy",
-    config = function()
-      local builtin = require("statuscol.builtin")
-      require("statuscol").setup({
-        relculright = true,
-        segments = {
-          { text = { builtin.foldfunc }, click = "v:lua.ScFa" },
-          { text = { "%s" }, click = "v:lua.ScSa" },
-          { text = { builtin.lnumfunc, " " }, click = "v:lua.ScLa" },
         },
       })
     end,
@@ -428,7 +371,7 @@ return {
 
           -- stylua: ignore
           center = {
-            { action = LazyVim.telescope("files"),                                    desc = " Find File",       icon = " ", key = "f" },
+            { action = LazyVim.telescope("files"),                                 desc = " Find File",       icon = " ", key = "f" },
             { action = "ene | startinsert",                                        desc = " New File",        icon = " ", key = "n" },
             { action = "Telescope oldfiles",                                       desc = " Recent Files",    icon = " ", key = "r" },
             { action = "Telescope projects",                                       desc = " Projects",        icon = " ", key = "p" },
@@ -465,5 +408,12 @@ return {
 
       return opts
     end,
+  },
+  {
+    "mistricky/codesnap.nvim",
+    build = "make",
+    version = "^1",
+    enabled = true,
+    event = "VeryLazy",
   },
 }

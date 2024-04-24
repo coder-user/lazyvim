@@ -126,11 +126,11 @@ return {
   {
     "stevearc/conform.nvim",
     optional = true,
-    opts = {
-      formatters_by_ft = {
-        go = { "golines", "goimports_reviser", "gofumpt" },
-      },
-    },
+    -- opts = {
+    --   formatters_by_ft = {
+    --     go = { "golines", "gofumpt", "goimports_reviser" },
+    --   },
+    -- },
     keys = {
       {
         "<leader>ll",
