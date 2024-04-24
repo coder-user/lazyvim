@@ -24,18 +24,6 @@ return {
       vim.o.foldlevelstart = 99
       vim.o.foldenable = false
       vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
-      -- vim.keymap.set("n", "zO", require("ufo").openAllFolds)
-      -- vim.keymap.set("n", "zF", require("ufo").closeAllFolds)
-      -- vim.keymap.set("n", "zf", "zc")
-      -- vim.keymap.set('n', 'to', require('ufo').openFoldsExceptKinds)
-      -- vim.keymap.set('n', 'tt', require('ufo').closeFoldsWith) -- closeAllFolds == closeFoldsWith(0)
-      vim.keymap.set("n", "tk", function()
-        local winid = require("ufo").peekFoldedLinesUnderCursor()
-        if not winid then
-          -- choose one of coc.nvim and nvim lsp
-          vim.lsp.buf.hover()
-        end
-      end)
 
       local handler = function(virtText, lnum, endLnum, width, truncate)
         local line = vim.fn.getline(lnum)
@@ -53,9 +41,6 @@ return {
           return virtText
         end
         if line:find("if%s+[^;]+;[^;]+!= nil") then
-          -- local startLine = lnum
-          -- local endLine = endLnum
-          -- local content = table.concat(vim.api.nvim_buf_get_lines(0, startLine, endLine - 1, false), "")
           local startLine = lnum
           local endLine = endLnum
           local lines = vim.api.nvim_buf_get_lines(0, startLine, endLine - 1, false)
@@ -76,7 +61,6 @@ return {
             local chunkWidth = vim.fn.strdisplaywidth(chunkText)
 
             if targetWidth > curWidth + chunkWidth then
-              -- chunkText = chunkText:gsub("!=", "")
               if chunkText == "err" then
                 errCount = errCount + 1
                 if errCount ~= 2 then
@@ -106,13 +90,11 @@ return {
             end
             curWidth = curWidth + vim.fn.strdisplaywidth(chunkText)
           end
-          -- newVirtText = newVirtText:gsub("if ", ""):gsub("; err != nil {", "")
           table.insert(newVirtText, { suffix, "k.bracket" })
           return newVirtText
         end
 
         local newVirtText = {}
-        -- local suffix = ('  %d '):format(endLnum - lnum)
         local suffix = ("...%d "):format(endLnum - lnum)
         local sufWidth = vim.fn.strdisplaywidth(suffix)
         local targetWidth = width - sufWidth
@@ -127,7 +109,6 @@ return {
             local hlGroup = chunk[2]
             table.insert(newVirtText, { chunkText, hlGroup })
             chunkWidth = vim.fn.strdisplaywidth(chunkText)
-            -- str width returned from truncate() may less than 2nd argument, need padding
             if curWidth + chunkWidth < targetWidth then
               suffix = suffix .. (" "):rep(targetWidth - curWidth - chunkWidth)
             end
@@ -139,19 +120,6 @@ return {
 
         return newVirtText
       end
-
-      -- local capabilities = vim.lsp.protocol.make_client_capabilities()
-      -- capabilities.textDocument.foldingRange = {
-      -- 	dynamicRegistration = false,
-      -- 	lineFoldingOnly = true
-      -- }
-      -- local language_servers = require("lspconfig").util.available_servers() -- or list servers manually like {'gopls', 'clangd'}
-      -- for _, ls in ipairs(language_servers) do
-      -- 	require('lspconfig')[ls].setup({
-      -- 		capabilities = capabilities
-      -- 		-- you can add other fields for setting up lsp server in this table
-      -- 	})
-      -- end
 
       require("ufo").setup({
         provider_selector = function(bufnr, filetype, buftype)

@@ -28,23 +28,6 @@ end
 
 vim.keymap.del("n", "<leader>l")
 
--- 定义一个自动命令组，以便于后续清理
-vim.api.nvim_create_augroup("GoFileType", { clear = true })
--- 自动命令，对 Go 文件设置快捷键
-vim.api.nvim_create_autocmd("FileType", {
-  group = "GoFileType",
-  pattern = "go",
-  callback = function()
-    vim.keymap.set(
-      { "n", "i", "v", "x" },
-      "<A-S-CR>",
-      '<CMD>lua require("code.telescope-customcmd").showCommandBar()<CR>',
-      { desc = "customcmd action", buffer = true }
-    )
-    vim.keymap.set({ "n", "i", "v", "x" }, "<A-CR>", "<CMD>GoCodeAction<CR>", { desc = "go action", buffer = true })
-  end,
-})
-
 -- 支持单个分屏最大化和恢复
 local original_sizes = {}
 local is_maximized = false
@@ -86,3 +69,42 @@ local function toggle_window_size()
 end
 
 vim.keymap.set("n", "<leader>wm", toggle_window_size, { desc = "Toggle window max size" })
+
+local function fold_if_error_found()
+  vim.api.nvim_win_set_option(0, "foldmethod", "manual")
+  local current_line = vim.api.nvim_win_get_cursor(0)[1]
+
+  local search_end_line = current_line + 100
+  local total_lines = vim.api.nvim_buf_line_count(0)
+
+  if search_end_line > total_lines then
+    search_end_line = total_lines
+  end
+  local error_patterns = { "if err != nil ", "if err := ", "if err = " }
+
+  for line = current_line, search_end_line do
+    local line_text = vim.api.nvim_buf_get_lines(0, line - 1, line, false)[1]
+    for _, pattern in ipairs(error_patterns) do
+      if line_text:find(pattern) then
+        vim.api.nvim_exec(tostring(line) .. "foldclose", false)
+      end
+    end
+  end
+end
+
+-- 定义一个自动命令组，以便于后续清理
+vim.api.nvim_create_augroup("GoFileType", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  group = "GoFileType",
+  pattern = "go",
+  callback = function()
+    vim.keymap.set("n", "<leader>le", fold_if_error_found, { desc = "Locate 'if err != nil' and fold" })
+    vim.keymap.set(
+      { "n", "i", "v", "x" },
+      "<A-S-CR>",
+      '<CMD>lua require("code.telescope-customcmd").showCommandBar()<CR>',
+      { desc = "customcmd action", buffer = true }
+    )
+    vim.keymap.set({ "n", "i", "v", "x" }, "<A-CR>", "<CMD>GoCodeAction<CR>", { desc = "go action", buffer = true })
+  end,
+})
