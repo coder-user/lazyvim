@@ -18,7 +18,7 @@ return {
     lazy = false,
     enabled = true,
     priority = 1000,
-    keys = { { "<leader>C", "<cmd>MonokaiProSelect<cr>", desc = "Select Moonokai pro filter" } },
+    -- keys = { { "<leader>C", "<cmd>MonokaiProSelect<cr>", desc = "Select Moonokai pro filter" } },
     opts = {
       transparent_background = false,
       devicons = true,

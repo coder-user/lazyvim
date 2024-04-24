@@ -21,4 +21,5 @@ if vim.g.neovide then
   vim.g.neovide_cursor_vfx_particle_density = 11.0
   vim.g.neovide_title_hidden = 1
   vim.g.neovide_fullscreen = false
+  vim.keymap.set("i", "<C-S-v>", "<C-R>+")
 end
