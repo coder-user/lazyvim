@@ -14,6 +14,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   pattern = { "go" },
   callback = function()
     vim.b.autoformat = false
+    vim.api.nvim_win_set_option(0, "foldmethod", "manual")
   end,
 })
 

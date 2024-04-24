@@ -71,7 +71,6 @@ end
 vim.keymap.set("n", "<leader>wm", toggle_window_size, { desc = "Toggle window max size" })
 
 local function fold_if_error_found()
-  vim.api.nvim_win_set_option(0, "foldmethod", "manual")
   local current_line = vim.api.nvim_win_get_cursor(0)[1]
 
   local search_end_line = current_line + 100
@@ -98,7 +97,7 @@ vim.api.nvim_create_autocmd("FileType", {
   group = "GoFileType",
   pattern = "go",
   callback = function()
-    vim.keymap.set("n", "<leader>le", fold_if_error_found, { desc = "Locate 'if err != nil' and fold" })
+    vim.keymap.set("n", "<leader>le", fold_if_error_found, { desc = "go err fold" })
     vim.keymap.set(
       { "n", "i", "v", "x" },
       "<A-S-CR>",
