@@ -1,10 +1,5 @@
-if false then
-  return {}
-end
-
 if vim.g.neovide then
   -- vim.o.guifont = "Maple Mono NF:h12"
-  vim.o.guifont = "Monaspace Neon:h12"
   -- set guifont=FiraCode\ Nerd\ Font:h19
   vim.opt.linespace = 2
 
@@ -23,5 +18,5 @@ if vim.g.neovide then
   vim.g.neovide_cursor_vfx_particle_lifetime = 0.9
   vim.g.neovide_cursor_vfx_particle_density = 11.0
   vim.g.neovide_title_hidden = 1
-  vim.g.neovide_fullscreen = true
+  vim.g.neovide_fullscreen = false
 end
