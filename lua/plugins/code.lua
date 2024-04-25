@@ -92,6 +92,11 @@ return {
         end,
       },
     },
+    opts = {
+      defaults = {
+        file_ignore_patterns = { "^vendor/" },
+      },
+    },
     keys = {
       { "<C-S-F>", LazyVim.telescope("live_grep"), desc = "Grep (Root Dir)" },
       { "<C-S-N>", LazyVim.telescope("files"), desc = "Find Files (Root Dir)" },
