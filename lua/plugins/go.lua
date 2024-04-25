@@ -106,6 +106,9 @@ return {
         "gofumpt",
         "staticcheck",
         "golangci-lint",
+        "gotests",
+        "nilaway",
+        "revive",
       })
     end,
   },
