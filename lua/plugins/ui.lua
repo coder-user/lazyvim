@@ -30,6 +30,7 @@ return {
 
       local handler = function(virtText, lnum, endLnum, width, truncate)
         local line = vim.fn.getline(lnum)
+        -- TODO: err
         if line:find("if%s+err%s*!= nil") then
           local prevLine = vim.api.nvim_buf_get_lines(0, lnum - 2, lnum - 1, false)[1]
           local indent = string.match(prevLine, "^%s*") or "" -- 获取上一行的缩进
@@ -123,10 +124,47 @@ return {
 
         return newVirtText
       end
+      local function get_error_handling_folds(bufnr)
+        local error_folds = {}
+        local line_count = vim.api.nvim_buf_line_count(bufnr)
+        local is_in_error_block = false
+        local error_block_start = 0
+
+        for i = 0, line_count - 1 do
+          local line = vim.api.nvim_buf_get_lines(bufnr, i, i + 1, false)[1]
+          -- 检查是否是错误处理开始的行，即包含 'err =' 或 'err :='
+          if not is_in_error_block and line:match("%s*err%s*[:]?=") then
+            is_in_error_block = true
+            error_block_start = i
+          -- 检查是否是错误处理块的结束行，即包含 '}'
+          elseif is_in_error_block and line:match("%s*}") then
+            is_in_error_block = false
+            table.insert(error_folds, { startLine = error_block_start, endLine = i })
+          end
+        end
+
+        -- 如果文件结束时仍然处于错误处理块中，将其添加到结果中
+        if is_in_error_block then
+          table.insert(error_folds, { startLine = error_block_start, endLine = line_count - 1 })
+        end
+
+        return error_folds
+      end
+      local ftMap = {
+        go = function(bufnr)
+          local err_folds = get_error_handling_folds(bufnr)
+          local lsp_folds = require("ufo").getFolds(bufnr, "treesitter")
+          for _, fold in ipairs(err_folds) do
+            table.insert(lsp_folds, fold)
+          end
+          -- print(vim.inspect(lsp_folds))
+          return lsp_folds
+        end,
+      }
 
       require("ufo").setup({
         provider_selector = function(bufnr, filetype, buftype)
-          return { "treesitter", "indent" }
+          return ftMap[filetype] or { "treesitter", "indent" }
         end,
         fold_virt_text_handler = handler,
         open_fold_hl_timeout = 150,
