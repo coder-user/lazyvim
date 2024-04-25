@@ -16,7 +16,7 @@ return {
   {
     "loctvl842/monokai-pro.nvim",
     lazy = false,
-    enabled = true,
+    enabled = false,
     priority = 1000,
     -- keys = { { "<leader>C", "<cmd>MonokaiProSelect<cr>", desc = "Select Moonokai pro filter" } },
     opts = {
