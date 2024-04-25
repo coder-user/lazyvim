@@ -8,7 +8,7 @@ return {
     lazy = true,
     opts = { style = "night" },
   },
-
+  { "Mofiqul/dracula.nvim" },
   {
     "catppuccin/nvim",
     lazy = true,
