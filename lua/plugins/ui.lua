@@ -31,36 +31,29 @@ return {
       local handler = function(virtText, lnum, endLnum, width, truncate)
         local line = vim.fn.getline(lnum)
         if line:find(".+,%s+err%s*[:=]+%s+.+%([^%)]*%)") then
-          -- 获取起始行到结束行之间的所有行
           local lines = vim.api.nvim_buf_get_lines(0, lnum + 1, endLnum, false)
-          -- 遍历获取的行，并对其进行处理
           for i, l in ipairs(lines) do
-            if l:find("return") then
-              lines[i] = l:gsub("^%s*", ""):gsub("return", "..") -- 替换 return 为 ..
-            else
-              lines[i] = l:gsub("^%s*", "") -- 去掉开头的空格
-            end
+            lines[i] = l:gsub("^%s*", "")
           end
-          -- 将处理后的所有行用分号连接起来
-          local newText = table.concat(lines, "; ")
-
+          local newText = table.concat(lines, "; "):gsub([[; }]], " ")
           local suffix = " ? " .. newText
+          local totalWidth = vim.fn.winwidth(0) -- 获取当前窗口的宽度
           local sufWidth = vim.fn.strdisplaywidth(suffix)
-          local targetWidth = width - sufWidth
-          local curWidth = 0
+          local maxSuffixLength = totalWidth - 10 -- 为其他文本保留一些空间
+          if sufWidth > maxSuffixLength then
+            suffix = suffix:sub(1, maxSuffixLength - 3) .. "..."
+          end
           local newVirtText = {}
-
-          -- 将原有的 virtText 处理并添加到 newVirtText
           for _, chunk in ipairs(virtText) do
             local chunkText = chunk[1]
             local chunkWidth = vim.fn.strdisplaywidth(chunkText)
-            if targetWidth > curWidth + chunkWidth then
+            if totalWidth > chunkWidth then
               table.insert(newVirtText, chunk)
+            else
+              break -- 停止添加文本，如果没有更多空间
             end
-            curWidth = curWidth + chunkWidth
           end
 
-          -- 在末尾添加处理后的新文本
           table.insert(newVirtText, { suffix, "k.bracket" })
           return newVirtText
         end
@@ -144,6 +137,7 @@ return {
 
         return newVirtText
       end
+
       local function get_error_handling_folds(bufnr)
         local error_folds = {}
         local line_count = vim.api.nvim_buf_line_count(bufnr)
