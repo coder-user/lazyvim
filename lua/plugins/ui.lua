@@ -30,20 +30,6 @@ return {
 
       local handler = function(virtText, lnum, endLnum, width, truncate)
         local line = vim.fn.getline(lnum)
-        -- TODO: err
-        if line:find("if%s+err%s*!= nil") then
-          local prevLine = vim.api.nvim_buf_get_lines(0, lnum - 2, lnum - 1, false)[1]
-          local indent = string.match(prevLine, "^%s*") or "" -- 获取上一行的缩进
-          local startLine = lnum
-          local endLine = endLnum
-          local lines = vim.api.nvim_buf_get_lines(0, startLine, endLine - 1, false)
-          for i, l in ipairs(lines) do
-            lines[i] = l:gsub("^%s*", ""):gsub("return", "..") -- 去掉开头的空格
-          end
-          local newText = indent .. table.concat(lines, "; ")
-          virtText = { { newText, "@comment" } }
-          return virtText
-        end
         if line:find(".+,%s+err%s*[:=]+%s+.+%([^%)]*%)") then
           -- 获取起始行到结束行之间的所有行
           local lines = vim.api.nvim_buf_get_lines(0, lnum + 1, endLnum, false)

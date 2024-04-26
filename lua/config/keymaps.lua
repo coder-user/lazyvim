@@ -79,7 +79,7 @@ local function fold_if_error_found()
   if search_end_line > total_lines then
     search_end_line = total_lines
   end
-  local error_patterns = { "if err != nil ", "if err := ", "if err = " }
+  local error_patterns = { "if%s+[^;]+;[^;]+!= nil", ".+,%s+err%s*[:=]+%s+.+%([^%)]*%)" }
 
   for line = current_line, search_end_line do
     local line_text = vim.api.nvim_buf_get_lines(0, line - 1, line, false)[1]
@@ -91,13 +91,35 @@ local function fold_if_error_found()
   end
 end
 
+local function fold_if_error_found_all()
+  -- 获取整个文件的行数
+  local total_lines = vim.api.nvim_buf_line_count(0)
+
+  -- 定义需要检查的错误模式
+  local error_patterns = { "if%s+[^;]+;[^;]+!= nil", ".+,%s+err%s*[:=]+%s+.+%([^%)]*%)" }
+
+  -- 遍历文件的每一行
+  for line = 1, total_lines do
+    -- 获取当前行的内容
+    local line_text = vim.api.nvim_buf_get_lines(0, line - 1, line, false)[1]
+
+    -- 检查当前行是否包含任何错误模式
+    for _, pattern in ipairs(error_patterns) do
+      if line_text:find(pattern) then
+        -- 如果找到错误模式，则折叠这一行
+        vim.api.nvim_exec(tostring(line) .. "foldclose", false)
+      end
+    end
+  end
+end
 -- 定义一个自动命令组，以便于后续清理
 vim.api.nvim_create_augroup("GoFileType", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
   group = "GoFileType",
   pattern = "go",
   callback = function()
-    vim.keymap.set("n", "<leader>le", fold_if_error_found, { desc = "go err fold" })
+    vim.keymap.set("n", "<leader>le", fold_if_error_found, { desc = "go err fold 100" })
+    vim.keymap.set("n", "<leader>lE", fold_if_error_found_all, { desc = "go err fold all" })
     vim.keymap.set(
       { "n", "i", "v", "x" },
       "<A-S-CR>",

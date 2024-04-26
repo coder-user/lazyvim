@@ -3,12 +3,13 @@ if false then
 end
 
 return {
+  { "Mofiqul/dracula.nvim" },
   {
     "folke/tokyonight.nvim",
+    enabled = true,
     lazy = true,
     opts = { style = "night" },
   },
-  { "Mofiqul/dracula.nvim" },
   {
     "catppuccin/nvim",
     lazy = true,
