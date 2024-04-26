@@ -24,6 +24,14 @@ local commands = {
     end,
   },
   {
+    name = "GoImport",
+    category = "go",
+    description = "补全import",
+    action = function()
+      vim.cmd([[GoImports]])
+    end,
+  },
+  {
     name = "GoAddTag",
     description = "添加tag",
     category = "go",
@@ -53,14 +61,6 @@ local commands = {
     description = "补全字段",
     action = function()
       vim.cmd([[GoFillStruct]])
-    end,
-  },
-  {
-    name = "GoImport",
-    category = "go",
-    description = "补全import",
-    action = function()
-      vim.cmd([[GoImports]])
     end,
   },
   {

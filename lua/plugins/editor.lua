@@ -1,6 +1,21 @@
 return {
   { "chrisgrieser/nvim-spider", lazy = true },
   {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {
+      defaults = {
+        ["<leader>l"] = { name = "+format" },
+        ["<leader>t"] = { name = "+test" },
+      },
+    },
+    config = function(_, opts)
+      local wk = require("which-key")
+      wk.setup(opts)
+      wk.register(opts.defaults)
+    end,
+  },
+  {
     "Pocco81/auto-save.nvim",
     enabled = true,
     event = "VeryLazy",

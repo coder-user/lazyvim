@@ -1,7 +1,8 @@
 if vim.g.neovide then
   -- vim.o.guifont = "Maple Mono NF:h12"
   -- vim.o.guifont = "Monaspace Neon:h12"
-  vim.o.guifont = "MonaspiceNe Nerd Font:h11"
+  -- vim.o.guifont = "MonaspiceNe Nerd Font:h11"
+  vim.o.guifont = "MonaspiceNe Nerd Font:h10"
   -- set guifont=FiraCode\ Nerd\ Font:h19
   vim.opt.linespace = 2
 

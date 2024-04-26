@@ -387,9 +387,15 @@ return {
         },
         config = {
           header = vim.split(logo, "\n"),
+          -- -- header -- type is table def
           -- week_header = {
-          --   enable = true,
+          --   enable  --boolean use a week header
+          --   concat  --concat string after time string line
+          --   append  --table append after time string line
           -- },
+          week_header = {
+            enable = false,
+          },
           -- packages = { enabled = true },
 
           -- stylua: ignore
