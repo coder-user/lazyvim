@@ -44,6 +44,40 @@ return {
           virtText = { { newText, "@comment" } }
           return virtText
         end
+        if line:find(".+,%s+err%s*[:=]+%s+.+%([^%)]*%)") then
+          -- 获取起始行到结束行之间的所有行
+          local lines = vim.api.nvim_buf_get_lines(0, lnum + 1, endLnum, false)
+          -- 遍历获取的行，并对其进行处理
+          for i, l in ipairs(lines) do
+            if l:find("return") then
+              lines[i] = l:gsub("^%s*", ""):gsub("return", "..") -- 替换 return 为 ..
+            else
+              lines[i] = l:gsub("^%s*", "") -- 去掉开头的空格
+            end
+          end
+          -- 将处理后的所有行用分号连接起来
+          local newText = table.concat(lines, "; ")
+
+          local suffix = " ? " .. newText
+          local sufWidth = vim.fn.strdisplaywidth(suffix)
+          local targetWidth = width - sufWidth
+          local curWidth = 0
+          local newVirtText = {}
+
+          -- 将原有的 virtText 处理并添加到 newVirtText
+          for _, chunk in ipairs(virtText) do
+            local chunkText = chunk[1]
+            local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+            if targetWidth > curWidth + chunkWidth then
+              table.insert(newVirtText, chunk)
+            end
+            curWidth = curWidth + chunkWidth
+          end
+
+          -- 在末尾添加处理后的新文本
+          table.insert(newVirtText, { suffix, "k.bracket" })
+          return newVirtText
+        end
         if line:find("if%s+[^;]+;[^;]+!= nil") then
           local startLine = lnum
           local endLine = endLnum
@@ -133,7 +167,7 @@ return {
         for i = 0, line_count - 1 do
           local line = vim.api.nvim_buf_get_lines(bufnr, i, i + 1, false)[1]
           -- 检查是否是错误处理开始的行，即包含 'err =' 或 'err :='
-          if not is_in_error_block and line:match("%s*err%s*[:]?=") then
+          if not is_in_error_block and line:match(".+,%s+err%s*[:=]+%s+.+%([^%)]*%)") then
             is_in_error_block = true
             error_block_start = i
           -- 检查是否是错误处理块的结束行，即包含 '}'
