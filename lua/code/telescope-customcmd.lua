@@ -148,7 +148,7 @@ local finder = finders.new_table({
   end,
 })
 
-M.showCommandBar = function(opts)
+M.showGoCommandBar = function(opts)
   opts = opts or {}
 
   local conf = require("telescope.config").values
