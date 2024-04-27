@@ -230,6 +230,7 @@ return {
     opts = {
       -- colorscheme = "dracula",
       colorscheme = "hardhacker",
+      -- colorscheme = "monokai-pro",
     },
   },
 }
