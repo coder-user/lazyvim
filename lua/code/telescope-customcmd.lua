@@ -1,4 +1,3 @@
-local telescope = require("telescope")
 local pickers = require("telescope.pickers")
 local finders = require("telescope.finders")
 local entry_display = require("telescope.pickers.entry_display")
@@ -156,7 +155,7 @@ M.showGoCommandBar = function(opts)
   local action_state = require("telescope.actions.state")
 
   pickers
-    .new(themes.get_cursor(opt), {
+    .new(themes.get_cursor(), {
       prompt_title = "Common commands",
       finder = finder,
       -- Use the default sorter
@@ -164,7 +163,7 @@ M.showGoCommandBar = function(opts)
       attach_mappings = function(prompt_bufnr, map)
         map("i", "<CR>", function()
           actions.close(prompt_bufnr)
-          local selection = action_state.get_selected_entry(prompt_bufnr)
+          local selection = action_state.get_selected_entry()
           selection.value.action()
         end)
         return true
