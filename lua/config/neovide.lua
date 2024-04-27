@@ -1,4 +1,5 @@
 if vim.g.neovide then
+  -- 设置 GUI 字体和大小
   -- vim.o.guifont = "Maple Mono NF:h12"
   -- vim.o.guifont = "Monaspace Neon:h12"
   -- vim.o.guifont = "MonaspiceNe Nerd Font:h11"
