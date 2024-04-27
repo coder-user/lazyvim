@@ -47,14 +47,14 @@ local commands = {
       vim.cmd([[GoRun -F %]])
     end,
   },
-  {
-    name = "GoTestFunc",
-    category = "go",
-    description = "测试当前函数",
-    action = function()
-      vim.cmd([[lua require('dap-go').debug_test()]])
-    end,
-  },
+  -- {
+  --   name = "GoTestFunc",
+  --   category = "go",
+  --   description = "测试当前函数",
+  --   action = function()
+  --     vim.cmd([[lua require('dap-go').debug_test()]])
+  --   end,
+  -- },
   {
     name = "GoFillStruct",
     category = "go",
