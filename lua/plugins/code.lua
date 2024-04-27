@@ -103,4 +103,5 @@ return {
       { "<C-F>", LazyVim.telescope("current_buffer_fuzzy_find"), desc = "Grep (Current file)" },
     },
   },
+  { "wakatime/vim-wakatime", lazy = false },
 }

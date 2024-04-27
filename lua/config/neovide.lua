@@ -23,5 +23,6 @@ if vim.g.neovide then
   vim.g.neovide_title_hidden = 1
   vim.g.neovide_fullscreen = false
 
-  vim.keymap.set("i", "<C-S-v>", "<C-R>+") -- Paste insert mode
+  vim.keymap.set("i", "<C-S-v>", "<C-R>+")
+  vim.keymap.set("n", "<C-S-v>", "<C-R>+")
 end

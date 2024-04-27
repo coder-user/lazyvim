@@ -18,22 +18,22 @@ return {
   {
     "Mofiqul/dracula.nvim",
     enabled = true,
-    lazy = true,
+    lazy = false,
   },
   {
     "folke/tokyonight.nvim",
     enabled = true,
-    lazy = true,
+    lazy = false,
     opts = { style = "night" },
   },
   {
     "catppuccin/nvim",
     enabled = true,
-    lazy = true,
+    lazy = false,
   },
   {
     "loctvl842/monokai-pro.nvim",
-    lazy = true,
+    lazy = false,
     enabled = true,
     priority = 1000,
     -- keys = { { "<leader>C", "<cmd>MonokaiProSelect<cr>", desc = "Select Moonokai pro filter" } },
