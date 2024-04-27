@@ -28,12 +28,7 @@ local function golang_key_map_set()
   set("n", "<leader>le", mecode.go_fold_nearby_100_errors, { desc = "Go Err Fold Nearby", buffer = true })
   set("n", "<leader>lE", mecode.go_fold_all_errors, { desc = "Go Err Fold  All", buffer = true })
   set("n", "<leader>lI", mecode.go_import_package_complete, { desc = "Go Import Package", buffer = true })
-  set(
-    { "n", "i", "v", "x" },
-    "<A-S-CR>",
-    require("code.telescope-customcmd").showGoCommandBar,
-    { desc = "Customcmd Action", buffer = true }
-  )
+  set({ "n", "i", "v", "x" }, "<A-S-CR>", require("code.telescope-customcmd").showGoCommandBar, { desc = "Customcmd Action", buffer = true })
   set({ "n", "i", "v", "x" }, "<A-CR>", "<CMD>GoCodeAction<CR>", { desc = "Go Action", buffer = true })
 end
 

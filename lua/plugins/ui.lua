@@ -85,15 +85,7 @@ return {
                 end
               end
 
-              if
-                chunkText ~= ";"
-                and chunkText ~= "err"
-                and chunkText ~= "!="
-                and chunkText ~= "nil"
-                and chunkText ~= "{"
-                and chunkText ~= "if"
-                and chunkText ~= " "
-              then
+              if chunkText ~= ";" and chunkText ~= "err" and chunkText ~= "!=" and chunkText ~= "nil" and chunkText ~= "{" and chunkText ~= "if" and chunkText ~= " " then
                 if chunkText == ":=" or chunkText == "=" then
                   chunkText = " " .. chunkText .. " "
                   table.insert(newVirtText, { chunkText, chunk[2] })
@@ -164,6 +156,7 @@ return {
 
         return error_folds
       end
+
       local ftMap = {
         go = function(bufnr)
           local err_folds = get_error_handling_folds(bufnr)
