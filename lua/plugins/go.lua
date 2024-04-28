@@ -136,10 +136,10 @@ return {
           -- 配置 goimports-reviser 参数
           extra_args = { "-imports-order", "std,project,general,company" },
         }),
-        nls.builtins.formatting.golines.with({
-          -- 配置 golines 参数
-          extra_args = { "-m", "128" },
-        }),
+        -- nls.builtins.formatting.golines.with({
+        --   -- 配置 golines 参数
+        --   extra_args = { "-m", "128" },
+        -- }),
       })
     end,
   },
