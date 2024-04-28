@@ -21,6 +21,7 @@ set({ "n", "v" }, "L", "6l")
 
 -- 设置全局快捷键，用于切换窗口最大化状态
 set("n", "<leader>wm", mecode.toggle_window_max_size, { desc = "Toggle window max size" })
+set("n", "<leader>fs", "<cmd>Telescope persisted<cr>", { desc = "Search history sessions" })
 
 -- ############## go ##############
 -- 设置 Go 文件专用快捷键，仅在当前缓冲区有效
@@ -31,6 +32,8 @@ local function golang_key_map_set()
   set({ "n", "i", "v", "x" }, "<A-S-CR>", require("code.telescope-customcmd").showGoCommandBar, { desc = "Customcmd Action", buffer = true })
   set({ "n", "i", "v", "x" }, "<A-CR>", "<CMD>GoCodeAction<CR>", { desc = "Go Action", buffer = true })
 end
+
+vim.api.nvim_set_keymap("n", "<leader>cp", ":lua require('luasnip').expand_or_jump()<CR>", { noremap = true, silent = true })
 
 vim.api.nvim_create_augroup("GoFileType", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {

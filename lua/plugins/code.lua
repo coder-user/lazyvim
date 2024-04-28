@@ -104,4 +104,8 @@ return {
     },
   },
   { "wakatime/vim-wakatime", lazy = false },
+  {
+    "olimorris/persisted.nvim",
+    config = true,
+  },
 }
