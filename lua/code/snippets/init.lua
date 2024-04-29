@@ -26,6 +26,7 @@ local snippets = {}
 
 -- 创建一个针对 Go 语言的片段表
 snippets.go = {}
+snippets.all = {}
 
 -- 添加第一个 Go 语言片段
 table.insert(
@@ -39,84 +40,25 @@ package model
 import "context"
 
 type (
-    {interfaceName} Model interface {{
-        Set(ctx context.Context, data {structName}) error
+    {1}Model interface {{
+        Set(ctx context.Context, data {2}) error
     }}
 
-    {structName} struct {{
+    {3} struct {{
         Model
     }}
 )
 
-func (p *{structName}) TableName() string {{
-    return "{tableName}"
+func (p *{4}) TableName() string {{
+    return "{5}s"
 }}
 ]],
       {
-        interfaceName = i(1, "Interface"),
-        structName = i(2, "StructName"),
-        tableName = i(3, "table_names"),
-      }
-    )
-  )
-)
-
--- 添加 Go 语言的代码片段
--- table.insert(
---   snippets.go,
---   s(
---     "gocreatefunc",
---     fmt(
---       [[
--- func (m *mysql{UserModel}) Create(ctx context.Context, {userVar} model.{UserType}) error {{
---     do := query.{UserType}.WithContext(ctx)
---     if err := do.Create(&{userVar}); err != nil {{
---         return errdefs.Unknown(ecode.Error(bizcode.InternalServerError, reasoncode.{ErrorCode}, err.Error()))
---     }}
---     return nil
--- }}
--- ]],
---       {
---         UserType = i(1, "User"),
---         UserModel = f(function(args)
---           return args[1][1] .. "Model"
---         end, { 1 }),
---         userVar = f(function(args)
---           local device = args[1][1]
---           return device:sub(1, 1):lower() .. device:sub(2)
---         end, { 1 }),
---         ErrorCode = f(function(args)
---           return args[1][1] .. "SetError"
---         end, { 1 }),
---       }
---     )
---   )
--- )
---
-
-table.insert(
-  snippets.go,
-  s(
-    "gocreatefunc",
-    fmt(
-      [[
-func (m *mysql{UserType}Model) Create(ctx context.Context, {userVar} model.{UserType}) error {{
-    do := query.{UserType}.WithContext(ctx)
-    if err := do.Create(&{userVar}); err != nil {{
-        return errdefs.Unknown(ecode.Error(bizcode.InternalServerError, reasoncode.{ErrorCode}, err.Error()))
-    }}
-    return nil
-}}
-]],
-      {
-        UserType = i(1, "User"),
-        userVar = f(function(args)
-          local user = args[1][1]
-          return user:sub(1, 1):lower() .. user:sub(2)
-        end, { 1 }),
-        ErrorCode = f(function(args)
-          return args[1][1]:gsub("^%l", string.upper) .. "CreateError"
-        end, { 1 }),
+        i(1, "StructName"),
+        rep(1),
+        rep(1),
+        rep(1),
+        i(2, "table_name"),
       }
     )
   )
