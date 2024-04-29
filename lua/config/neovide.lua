@@ -43,7 +43,12 @@ vim.g.neovide_refresh_rate = 60 -- 刷新率，默认值：60 Hz，说明：设�
 -- vim.g.neovide_antialiasing = true -- 文本抗锯齿，默认值：true，说明：开启文本抗锯齿以提高文字显示的清晰度
 
 vim.keymap.set("i", "<C-S-v>", "<C-R>+")
-vim.keymap.set("n", "<C-S-v>", "<C-R>+")
+vim.keymap.set("n", "<C-S-v>", '"+P')
+vim.keymap.set("v", "<C-S-v>", '"+P')
+vim.keymap.set("c", "<C-S-v>", "<C-R>+")
+vim.keymap.set("i", "<C-S-c>", '"+y')
+vim.keymap.set("n", "<C-S-c>", '"+y')
+vim.keymap.set("v", "<C-S-c>", '"+y')
 
 local function change_font_size(delta)
   local current_font = vim.o.guifont
