@@ -33,8 +33,6 @@ local function golang_key_map_set()
   set({ "n", "i", "v", "x" }, "<A-CR>", "<CMD>GoCodeAction<CR>", { desc = "Go Action", buffer = true })
 end
 
-vim.api.nvim_set_keymap("n", "<leader>cp", ":lua require('luasnip').expand_or_jump()<CR>", { noremap = true, silent = true })
-
 vim.api.nvim_create_augroup("GoFileType", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
   group = "GoFileType",

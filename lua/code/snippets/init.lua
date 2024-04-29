@@ -87,8 +87,8 @@ func New{2}Model(db *gorm.DB) model.{3}Model {{
 }}
 
 func (m *mysql{5}Model) Create(ctx context.Context, {name} model.{6}) error {{
-    do := query.{struct_type}.WithContext(ctx)
-    if err := do.Create(&{7}); err != nil {{
+    do := query.{7}.WithContext(ctx)
+    if err := do.Create(&{8}); err != nil {{
         return errdefs.Unknown(ecode.Error(bizcode.InternalServerError, reasoncode.{9}CreateError, err.Error()))
     }}
     return nil
@@ -96,6 +96,8 @@ func (m *mysql{5}Model) Create(ctx context.Context, {name} model.{6}) error {{
 ]],
       {
         i(1, "Device"),
+        rep(1),
+        rep(1),
         rep(1),
         rep(1),
         rep(1),

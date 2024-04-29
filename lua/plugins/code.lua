@@ -91,6 +91,14 @@ return {
           end)
         end,
       },
+      {
+        "benfowler/telescope-luasnip.nvim",
+        config = function()
+          LazyVim.on_load("telescope.nvim", function()
+            require("telescope").load_extension("luasnip")
+          end)
+        end,
+      },
     },
     opts = {
       defaults = {
@@ -101,10 +109,12 @@ return {
       { "<C-S-F>", LazyVim.telescope("live_grep"), desc = "Grep (Root Dir)" },
       { "<C-S-N>", LazyVim.telescope("files"), desc = "Find Files (Root Dir)" },
       { "<C-F>", LazyVim.telescope("current_buffer_fuzzy_find"), desc = "Grep (Current file)" },
+      { "<leader>cp", "<cmd>Telescope luasnip<CR>", desc = "Lua Snip" },
     },
   },
   { "wakatime/vim-wakatime", lazy = false },
   {
+    enabled = false,
     "olimorris/persisted.nvim",
     config = true,
   },
