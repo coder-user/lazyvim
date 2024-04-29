@@ -1,5 +1,3 @@
-local snippets = {}
-
 local ls = require("luasnip")
 local s = ls.snippet
 local sn = ls.snippet_node
@@ -21,59 +19,15 @@ local types = require("luasnip.util.types")
 local conds = require("luasnip.extras.conditions")
 local conds_expand = require("luasnip.extras.conditions.expand")
 
--- 创建一个 snippets 表
-local snippets = {}
-
--- 创建一个针对 Go 语言的片段表
-snippets.go = {}
-snippets.all = {}
-
--- 添加第一个 Go 语言片段
-table.insert(
-  snippets.go,
-  s(
-    "gomodel",
-    fmt(
-      [[
-package model
-
-import "context"
-
-type (
-    {1}Model interface {{
-        Set(ctx context.Context, data {2}) error
-    }}
-
-    {3} struct {{
-        Model
-    }}
-)
-
-func (p *{4}) TableName() string {{
-    return "{table_name}s"
-}}
-]],
+return {
+  all = {
+    s(
       {
-        i(1, "StructName"),
-        rep(1),
-        rep(1),
-        rep(1),
-        -- i(2, "table_name"),
-        table_name = f(function(args)
-          local name = args[1][1]
-          return name:sub(1, 1):lower() .. name:sub(2)
-        end, { 1 }),
-      }
-    )
-  )
-)
-
-table.insert(
-  snippets.go,
-  s(
-    "mysqlmodel",
-    fmt(
-      [[
+        trig = "gomysqlmodel",
+        dscr = "go mysql 代码实现",
+      },
+      fmt(
+        [[
 package mysql
 
 type mysql{1}Model struct {{
@@ -94,22 +48,61 @@ func (m *mysql{5}Model) Create(ctx context.Context, {name} model.{6}) error {{
     return nil
 }}
 ]],
-      {
-        i(1, "Device"),
-        rep(1),
-        rep(1),
-        rep(1),
-        rep(1),
-        rep(1),
-        rep(1),
-        rep(1),
-        rep(1),
-        name = f(function(args)
-          local name = args[1][1]
-          return name:sub(1, 1):lower() .. name:sub(2)
-        end, { 1 }),
-      }
-    )
-  )
+        {
+          i(1, "User"),
+          rep(1),
+          rep(1),
+          rep(1),
+          rep(1),
+          rep(1),
+          rep(1),
+          rep(1),
+          rep(1),
+          name = f(function(args)
+            local name = args[1][1]
+            return name:sub(1, 1):lower() .. name:sub(2)
+          end, { 1 }),
+        }
+      )
+    ),
+
+    s(
+      "gomodel",
+      fmt(
+        [[
+package model
+
+import "context"
+
+type (
+    {1}Model interface {{
+        Set(ctx context.Context, {2} {3}) error
+    }}
+
+    {4} struct {{
+        Model
+    }}
 )
-return snippets
+
+func (p *{5}) TableName() string {{
+    return "{6}s"
+}}
+]],
+        {
+          i(1, "StructName"),
+          f(function(args)
+            local name = args[1][1]
+            return name:sub(1, 1):lower() .. name:sub(2)
+          end, { 1 }),
+          rep(1),
+          rep(1),
+          rep(1),
+          f(function(args)
+            local name = args[1][1]
+            return name:sub(1, 1):lower() .. name:sub(2)
+          end, { 1 }),
+        }
+      )
+    ),
+  },
+}
