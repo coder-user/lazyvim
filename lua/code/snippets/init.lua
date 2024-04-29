@@ -50,7 +50,7 @@ type (
 )
 
 func (p *{4}) TableName() string {{
-    return "{5}s"
+    return "{table_name}s"
 }}
 ]],
       {
@@ -58,7 +58,11 @@ func (p *{4}) TableName() string {{
         rep(1),
         rep(1),
         rep(1),
-        i(2, "table_name"),
+        -- i(2, "table_name"),
+        table_name = f(function(args)
+          local name = args[1][1]
+          return name:sub(1, 1):lower() .. name:sub(2)
+        end, { 1 }),
       }
     )
   )
