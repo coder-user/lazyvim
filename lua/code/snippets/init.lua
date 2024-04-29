@@ -68,4 +68,46 @@ func (p *{4}) TableName() string {{
   )
 )
 
+table.insert(
+  snippets.go,
+  s(
+    "mysqlmodel",
+    fmt(
+      [[
+package mysql
+
+type mysql{1}Model struct {{
+    db *gorm.DB
+}}
+
+func New{2}Model(db *gorm.DB) model.{3}Model {{
+    return &mysql{4}Model{{
+        db: db,
+    }}
+}}
+
+func (m *mysql{5}Model) Create(ctx context.Context, {name} model.{6}) error {{
+    do := query.{struct_type}.WithContext(ctx)
+    if err := do.Create(&{7}); err != nil {{
+        return errdefs.Unknown(ecode.Error(bizcode.InternalServerError, reasoncode.{9}CreateError, err.Error()))
+    }}
+    return nil
+}}
+]],
+      {
+        i(1, "Device"),
+        rep(1),
+        rep(1),
+        rep(1),
+        rep(1),
+        rep(1),
+        rep(1),
+        name = f(function(args)
+          local name = args[1][1]
+          return name:sub(1, 1):lower() .. name:sub(2)
+        end, { 1 }),
+      }
+    )
+  )
+)
 return snippets
