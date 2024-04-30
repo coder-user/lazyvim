@@ -8,7 +8,10 @@ return {
         ["<CR>"] = {
           c = cmp.mapping.confirm({ select = false }),
         },
-        ["<Down>"] = {
+        ["<C-e>"] = {
+          c = cmp.mapping.abort(),
+        },
+        ["<Tab>"] = {
           c = function()
             if cmp.visible() then
               cmp.select_next_item()
@@ -17,7 +20,7 @@ return {
             end
           end,
         },
-        ["<Up>"] = {
+        ["<S-Tab>"] = {
           c = function()
             if cmp.visible() then
               cmp.select_prev_item()

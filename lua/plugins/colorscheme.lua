@@ -6,6 +6,7 @@ return {
   {
     "hardhackerlabs/theme-vim",
     name = "hardhacker",
+    enabled = false,
     lazy = false,
     priority = 1000,
     config = function()
@@ -22,19 +23,19 @@ return {
   },
   {
     "folke/tokyonight.nvim",
-    enabled = true,
+    enabled = false,
     lazy = false,
     opts = { style = "night" },
   },
   {
     "catppuccin/nvim",
-    enabled = true,
+    enabled = false,
     lazy = false,
   },
   {
     "loctvl842/monokai-pro.nvim",
     lazy = false,
-    enabled = true,
+    enabled = false,
     priority = 1000,
     -- keys = { { "<leader>C", "<cmd>MonokaiProSelect<cr>", desc = "Select Moonokai pro filter" } },
     opts = {
@@ -228,8 +229,8 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      -- colorscheme = "dracula",
-      colorscheme = "hardhacker",
+      colorscheme = "dracula",
+      -- colorscheme = "hardhacker",
       -- colorscheme = "monokai-pro",
     },
   },
