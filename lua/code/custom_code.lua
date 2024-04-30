@@ -115,4 +115,51 @@ function M.go_import_package_complete()
   coroutine.resume(co)
 end
 
+function M.go_git_format_changed_files()
+  -- 保存当前 buffer 的编号
+  local current_buf = vim.api.nvim_get_current_buf()
+
+  -- 获取项目的根目录
+  local project_nvim = require("project_nvim.project")
+  local project_root, detection_method = project_nvim.get_project_root()
+  if project_root == nil then
+    print("Project root not found!")
+    return
+  end
+
+  -- 在项目根目录中执行 git 命令，找到所有修改过的文件
+  local cmd = "git -C " .. project_root .. " diff --name-only HEAD"
+  local all_modified_files = vim.fn.systemlist(cmd)
+
+  -- 使用 Lua 过滤出 .go 文件
+  local modified_go_files = {}
+  for _, file in ipairs(all_modified_files) do
+    if string.match(file, "%.go$") then -- 正则表达式匹配 .go 结尾的文件
+      table.insert(modified_go_files, file)
+    end
+  end
+
+  if #modified_go_files == 0 then
+    return
+  end
+
+  -- 遍历所有修改过的文件并格式化
+  for _, file in ipairs(modified_go_files) do
+    local full_path = project_root .. "/" .. file
+    -- 检查文件是否真实存在
+    if vim.fn.filereadable(full_path) == 1 then
+      -- 打开文件
+      vim.cmd("e " .. full_path)
+      -- 使用 conform 格式化文件
+      require("conform").format({ async = true, lsp_fallback = true })
+      -- 保存文件
+      vim.cmd("w")
+    else
+      print("File not found: " .. full_path)
+    end
+  end
+
+  -- 返回到最初的 buffer
+  vim.api.nvim_set_current_buf(current_buf)
+end
 return M

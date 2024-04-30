@@ -18,10 +18,10 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   end,
 })
 
--- 退出文件前进行格式化
-vim.api.nvim_create_autocmd("BufLeave", {
-  pattern = "*.go",
-  callback = function()
-    require("conform").format({ async = true, lsp_fallback = true })
-  end,
-})
+-- -- 退出文件前进行格式化
+-- vim.api.nvim_create_autocmd("BufLeave", {
+--   pattern = "*.go",
+--   callback = function()
+--     require("conform").format({ async = true, lsp_fallback = true })
+--   end,
+-- })
