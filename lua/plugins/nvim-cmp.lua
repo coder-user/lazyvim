@@ -8,6 +8,24 @@ return {
         ["<CR>"] = {
           c = cmp.mapping.confirm({ select = false }),
         },
+        ["<Down>"] = {
+          c = function()
+            if cmp.visible() then
+              cmp.select_next_item()
+            else
+              cmp.complete()
+            end
+          end,
+        },
+        ["<Up>"] = {
+          c = function()
+            if cmp.visible() then
+              cmp.select_prev_item()
+            else
+              cmp.complete()
+            end
+          end,
+        },
       }),
       sources = cmp.config.sources({
         { name = "path" },
