@@ -3,10 +3,10 @@ if vim.g.neovide == false then
 end
 
 -- 设置 GUI 字体和大小
--- vim.o.guifont = "Maple Mono NF:h12"  -- 字体选项
+vim.o.guifont = "Maple Mono NF:h10" -- 字体选项
 -- vim.o.guifont = "Monaspace Neon:h12" -- 字体选项
 -- vim.o.guifont = "MonaspiceNe Nerd Font:h11" -- 字体选项
-vim.o.guifont = "MonaspiceNe Nerd Font:h10" -- 当前字体和大小设置
+-- vim.o.guifont = "MonaspiceNe Nerd Font:h10" -- 当前字体和大小设置
 -- set guifont=FiraCode\ Nerd\ Font:h19 -- 另一种字体设置示例
 vim.opt.linespace = 2 -- 行间距
 

@@ -26,8 +26,8 @@ set("n", "<leader>wm", mecode.toggle_window_max_size, { desc = "Toggle window ma
 -- ############## go ##############
 -- 设置 Go 文件专用快捷键，仅在当前缓冲区有效
 local function golang_key_map_set()
-  set("n", "<leader>le", mecode.go_fold_nearby_100_errors, { desc = "Go Err Fold Nearby", buffer = true })
-  set("n", "<leader>lE", mecode.go_fold_all_errors, { desc = "Go Err Fold  All", buffer = true })
+  -- set("n", "<leader>le", mecode.go_fold_nearby_100_errors, { desc = "Go Err Fold Nearby", buffer = true })
+  set("n", "<leader>le", mecode.go_fold_all_errors, { desc = "Go Err Fold  All", buffer = true })
   set("n", "<leader>lI", mecode.go_import_package_complete, { desc = "Go Import Package", buffer = true })
   set("n", "<leader>lg", mecode.go_git_format_changed_files, { desc = "Go Git Change Format", buffer = true })
   set({ "n", "i", "v", "x" }, "<leader>ci", "<CMD>GoImports<CR>", { desc = "Go Code Import", buffer = true })

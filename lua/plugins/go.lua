@@ -49,7 +49,7 @@ return {
                 constantValues = true,
                 functionTypeParameters = false,
                 parameterNames = false,
-                rangeVariableTypes = false,
+                rangeVariableTypes = true,
               },
               analyses = {
                 -- fieldalignment = true,
