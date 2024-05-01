@@ -21,8 +21,8 @@ function M.toggle_window_max_size()
   local cur_win = vim.api.nvim_get_current_win()
   local cur_width = vim.api.nvim_win_get_width(cur_win)
   local cur_height = vim.api.nvim_win_get_height(cur_win)
-  local total_width = vim.api.nvim_get_option("columns")
-  local total_height = vim.api.nvim_get_option("lines")
+  local total_width = vim.o.columns
+  local total_height = vim.o.lines
 
   if not M.is_maximized and (cur_width < total_width or cur_height < total_height) then
     store_original_sizes()
@@ -162,4 +162,5 @@ function M.go_git_format_changed_files()
   -- 返回到最初的 buffer
   vim.api.nvim_set_current_buf(current_buf)
 end
+
 return M

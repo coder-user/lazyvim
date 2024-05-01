@@ -21,7 +21,7 @@ set({ "n", "v" }, "L", "6l")
 
 -- 设置全局快捷键，用于切换窗口最大化状态
 set("n", "<leader>wm", mecode.toggle_window_max_size, { desc = "Toggle window max size" })
-set("n", "<leader>fs", "<cmd>Telescope persisted<cr>", { desc = "Search history sessions" })
+-- set("n", "<leader>fs", "<cmd>Telescope persisted<cr>", { desc = "Search history sessions" })
 
 -- ############## go ##############
 -- 设置 Go 文件专用快捷键，仅在当前缓冲区有效
@@ -30,6 +30,7 @@ local function golang_key_map_set()
   set("n", "<leader>lE", mecode.go_fold_all_errors, { desc = "Go Err Fold  All", buffer = true })
   set("n", "<leader>lI", mecode.go_import_package_complete, { desc = "Go Import Package", buffer = true })
   set("n", "<leader>lg", mecode.go_git_format_changed_files, { desc = "Go Git Change Format", buffer = true })
+  set({ "n", "i", "v", "x" }, "<leader>ci", "<CMD>GoImports<CR>", { desc = "Go Code Import", buffer = true })
   set({ "n", "i", "v", "x" }, "<A-S-CR>", require("code.telescope-customcmd").showGoCommandBar, { desc = "Customcmd Action", buffer = true })
   set({ "n", "i", "v", "x" }, "<A-CR>", "<CMD>GoCodeAction<CR>", { desc = "Go Action", buffer = true })
 end
