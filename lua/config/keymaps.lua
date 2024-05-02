@@ -20,7 +20,8 @@ set({ "n", "v" }, "H", "6h")
 set({ "n", "v" }, "L", "6l")
 
 -- 设置全局快捷键，用于切换窗口最大化状态
-set("n", "<leader>wm", mecode.toggle_window_max_size, { desc = "Toggle window max size" })
+set("n", "<leader>wm", mecode.toggle_window_max_size, { desc = "Toggle Window Max Size" })
+set("n", "<localleader>uf", mecode.neovide_select_font, { desc = "Neovide Select Font" })
 -- set("n", "<leader>fs", "<cmd>Telescope persisted<cr>", { desc = "Search history sessions" })
 
 -- ############## go ##############

@@ -159,8 +159,83 @@ function M.go_git_format_changed_files()
     end
   end
 
-  -- 返回到最初的 buffer
+  -- 返回到最初的 buffe
   vim.api.nvim_set_current_buf(current_buf)
+end
+
+-- function M.neovide_select_font()
+--   local fonts = {
+--     "Maple Mono NF:h10",
+--     "MonaspiceNe Nerd Font:h10",
+--     "FiraCode Nerd Font Mono:h10",
+--     "FiraCode Nerd Font:h10",
+--     "JetBrainsMono Nerd Font Mono:h10",
+--     "JetBrainsMono Nerd Font:h10",
+--   }
+--
+--   vim.ui.select(fonts, { prompt = "Select Font:" }, function(choice)
+--     if choice then
+--       vim.o.guifont = choice
+--       print("Font set to " .. choice)
+--     else
+--       print("Font selection cancelled.")
+--     end
+--   end)
+-- end
+
+local function update_guifont_setting(font_setting)
+  local config_path = vim.fn.stdpath("config") .. "/lua/config/neovide.lua" -- 指向正确的配置文件路径
+  local new_setting_line = 'vim.o.guifont = "' .. font_setting .. '"'
+
+  local file = io.open(config_path, "r")
+  local lines = {}
+  local found = false
+
+  if file then
+    for line in file:lines() do
+      if line:match("^vim.o.guifont =") then
+        table.insert(lines, new_setting_line)
+        found = true
+      else
+        table.insert(lines, line)
+      end
+    end
+    file:close()
+
+    if not found then
+      table.insert(lines, new_setting_line)
+    end
+
+    file = io.open(config_path, "w")
+    for _, line in ipairs(lines) do
+      file:write(line .. "\n")
+    end
+    file:close()
+    print("Font setting updated and saved to config file.")
+  else
+    print("Failed to open config file.")
+  end
+end
+
+function M.neovide_select_font()
+  local fonts = {
+    "Maple Mono NF:h10",
+    "MonaspiceNe Nerd Font:h10",
+    "FiraCode Nerd Font Mono:h10",
+    "FiraCode Nerd Font:h10",
+    "JetBrainsMono Nerd Font Mono:h10",
+    "JetBrainsMono Nerd Font:h10",
+  }
+
+  vim.ui.select(fonts, { prompt = "Select Font:" }, function(choice)
+    if choice then
+      vim.o.guifont = choice
+      update_guifont_setting(choice) -- 更新配置文件
+      print("Font set to " .. choice)
+    else
+      print("Font selection cancelled.")
+    end
+  end)
 end
 
 return M
