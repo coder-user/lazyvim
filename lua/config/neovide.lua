@@ -3,7 +3,7 @@ if vim.g.neovide == false then
 end
 
 -- 设置 GUI 字体和大小
-vim.o.guifont = "MonaspiceNe Nerd Font:h10"
+vim.o.guifont = "Maple Mono NF:h11"
 -- vim.o.guifont = "Monaspace Neon:h12" -- 字体选项
 -- vim.o.guifont = "MonaspiceNe Nerd Font:h11" -- 字体选项
 -- vim.o.guifont = "MonaspiceNe Nerd Font:h10" -- 当前字体和大小设置
@@ -30,16 +30,15 @@ vim.g.neovide_cursor_vfx_particle_speed = 10.0 -- 光标特效粒子速度，默
 vim.g.neovide_title_hidden = 1 -- 隐藏标题栏，默认值：0，说明：是否隐藏窗口标题栏
 vim.g.neovide_fullscreen = false -- 全屏模式，默认值：false，说明：是否开启全屏模式
 vim.g.neovide_refresh_rate = 60 -- 刷新率，默认值：60 Hz，说明：设置 Neovide 的屏幕刷新率
-
--- vim.g.neovide_no_idle = false -- 禁用空闲时降低刷新率，默认值：false，说明：空闲时是否降低刷新率（解决全屏闪屏问题）
+vim.g.neovide_hide_mouse_when_typing = true -- 输入时隐藏鼠标，默认值：true，说明：是否在打字时自动隐藏鼠标指针
+vim.g.neovide_confirm_quit = false -- 退出确认，默认值：false，说明：退出 Neovide 时是否显示确认对话框
 -- vim.g.neovide_cursor_animation_length = 0.13 -- 光标动画时长，默认值：0.13 秒，说明：光标动画的持续时间
 -- vim.g.neovide_cursor_trail_size = 0.8 -- 光标尾巴大小，默认值：0.8，说明：光标尾巴的长度
+-- vim.g.neovide_no_idle = false -- 禁用空闲时降低刷新率，默认值：false，说明：空闲时是否降低刷新率（解决全屏闪屏问题）
 -- vim.g.neovide_profiler = false -- 性能分析器，默认值：false，说明：是否开启性能分析器
 -- vim.g.neovide_remember_window_size = false -- 记住窗口大小，默认值：false，说明：是否记忆窗口的大小和位置
 -- vim.g.neovide_input_use_logo = false -- 在 macOS 使用 Logo 键作为 Super 键，默认值：false，说明：是否将 Logo 键当作 Super 键使用
--- vim.g.neovide_hide_mouse_when_typing = true -- 输入时隐藏鼠标，默认值：true，说明：是否在打字时自动隐藏鼠标指针
 -- vim.g.neovide_scale_factor = 1.0 -- 窗口缩放比例，默认值：1.0，说明：窗口的缩放因子
--- vim.g.neovide_confirm_quit = false -- 退出确认，默认值：false，说明：退出 Neovide 时是否显示确认对话框
 -- vim.g.neovide_antialiasing = true -- 文本抗锯齿，默认值：true，说明：开启文本抗锯齿以提高文字显示的清晰度
 
 vim.keymap.set("i", "<C-S-v>", "<C-R>+")

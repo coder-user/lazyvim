@@ -163,26 +163,6 @@ function M.go_git_format_changed_files()
   vim.api.nvim_set_current_buf(current_buf)
 end
 
--- function M.neovide_select_font()
---   local fonts = {
---     "Maple Mono NF:h10",
---     "MonaspiceNe Nerd Font:h10",
---     "FiraCode Nerd Font Mono:h10",
---     "FiraCode Nerd Font:h10",
---     "JetBrainsMono Nerd Font Mono:h10",
---     "JetBrainsMono Nerd Font:h10",
---   }
---
---   vim.ui.select(fonts, { prompt = "Select Font:" }, function(choice)
---     if choice then
---       vim.o.guifont = choice
---       print("Font set to " .. choice)
---     else
---       print("Font selection cancelled.")
---     end
---   end)
--- end
-
 local function update_guifont_setting(font_setting)
   local config_path = vim.fn.stdpath("config") .. "/lua/config/neovide.lua" -- 指向正确的配置文件路径
   local new_setting_line = 'vim.o.guifont = "' .. font_setting .. '"'
@@ -219,12 +199,12 @@ end
 
 function M.neovide_select_font()
   local fonts = {
-    "Maple Mono NF:h10",
-    "MonaspiceNe Nerd Font:h10",
-    "FiraCode Nerd Font Mono:h10",
-    "FiraCode Nerd Font:h10",
-    "JetBrainsMono Nerd Font Mono:h10",
-    "JetBrainsMono Nerd Font:h10",
+    "Maple Mono NF:h11",
+    "MonaspiceNe Nerd Font:h11",
+    "FiraCode Nerd Font Mono:h11",
+    "FiraCode Nerd Font:h11",
+    "JetBrainsMono Nerd Font Mono:h11",
+    "JetBrainsMono Nerd Font:h11",
   }
 
   vim.ui.select(fonts, { prompt = "Select Font:" }, function(choice)
