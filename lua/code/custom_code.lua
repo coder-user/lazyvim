@@ -43,28 +43,35 @@ end
 -- go --
 
 function M.go_fold_all_errors()
+  require("ufo").openAllFolds()
   local total_lines = vim.api.nvim_buf_line_count(0)
   local error_patterns = { "if%s+[^;]+;[^;]+!= nil", ".+,%s+err%s*[:=]+%s+.+%([^%)]*%)" }
   for line = 1, total_lines do
     local line_text = vim.api.nvim_buf_get_lines(0, line - 1, line, false)[1]
+    local willFold = false
+
     for _, pattern in ipairs(error_patterns) do
       if line_text:find(pattern) then
-        vim.api.nvim_exec(tostring(line) .. "foldclose", false)
+        willFold = true
       end
     end
 
     -- 添加单行 if 块的判断逻辑
-    if line_text:find("^%s*if.+{$") then
+    if (line_text:find("^%s*if.+{$") or line_text:find("^%s*func.+{$")) and not line_text:find("err%s*[:=]") then
       local isSingleReturnBlock = false
       local lines = vim.api.nvim_buf_get_lines(0, line, line + 2, false)
       if #lines >= 2 and lines[#lines]:match("^%s*}%s*$") then
-        if lines[1]:match("^%s*return%s+.+%s*$") then
+        if lines[1]:match("^%s*return%s+.+") then
           isSingleReturnBlock = true
         end
       end
       if isSingleReturnBlock then
-        vim.api.nvim_exec(tostring(line) .. "foldclose", false)
+        willFold = true -- 标记已经执行过折叠操作
       end
+    end
+
+    if willFold then
+      vim.api.nvim_exec(tostring(line) .. "foldclose", false)
     end
   end
 end

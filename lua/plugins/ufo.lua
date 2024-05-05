@@ -88,15 +88,15 @@ return {
           return newVirtText
         end
         -- 判断是否为单行的 if 或 func 块
-        -- if line:find("^%s*if.+{$") or line:match("^%s*func.+{$") then
-        if line:find("^%s*if.+{$") then
+        if line:find("^%s*if.+{$") or line:find("^func.+{$") then
+          -- if line:find("^%s*if.+{$") then
           local isSingleReturnBlock = false
           local returnStatement = ""
           local lines = vim.api.nvim_buf_get_lines(0, lnum, endLnum, false)
           if #lines >= 2 and lines[#lines]:match("^%s*}%s*$") then
-            if lines[1]:match("^%s*return%s+.+%s*$") then
+            if lines[1]:match("^%s*return%s+.+") then
               isSingleReturnBlock = true
-              returnStatement = lines[1]:match("^%s*(return%s+.+)%s*$") -- 提取return语句
+              returnStatement = lines[1]:match("^%s*(return%s+.+)$") -- 提取return语句
             end
           end
 
