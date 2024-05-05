@@ -2,6 +2,8 @@ return {
   {
     "kevinhwang91/nvim-ufo",
     event = "BufReadPost",
+    -- event = "BufWinEnter",
+    lazy = false,
     enabled = true,
     dependencies = { "kevinhwang91/promise-async", "nvim-treesitter/nvim-treesitter", "luukvbaal/statuscol.nvim" },
     config = function()
@@ -85,6 +87,45 @@ return {
           table.insert(newVirtText, { suffix, "k.bracket" })
           return newVirtText
         end
+        -- 判断是否为单行的 if 或 func 块
+        -- if line:find("^%s*if.+{$") or line:match("^%s*func.+{$") then
+        if line:find("^%s*if.+{$") then
+          local isSingleReturnBlock = false
+          local returnStatement = ""
+          local lines = vim.api.nvim_buf_get_lines(0, lnum, endLnum, false)
+          if #lines >= 2 and lines[#lines]:match("^%s*}%s*$") then
+            if lines[1]:match("^%s*return%s+.+%s*$") then
+              isSingleReturnBlock = true
+              returnStatement = lines[1]:match("^%s*(return%s+.+)%s*$") -- 提取return语句
+            end
+          end
+
+          if isSingleReturnBlock then
+            local suffix = "? " .. "{ " .. returnStatement
+            local totalWidth = vim.fn.winwidth(0) -- 获取当前窗口的宽度
+            local sufWidth = vim.fn.strdisplaywidth(suffix)
+            local maxSuffixLength = totalWidth - 10 -- 为其他文本保留一些空间
+            if sufWidth > maxSuffixLength then
+              suffix = suffix:sub(1, maxSuffixLength - 3) .. "..."
+            else
+              suffix = suffix .. " }"
+            end
+            local newVirtText = {}
+            for _, chunk in ipairs(virtText) do
+              local chunkText = chunk[1]
+              local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+              if chunkText ~= "{" then
+                if totalWidth > chunkWidth + sufWidth then
+                  table.insert(newVirtText, chunk)
+                else
+                  break -- 停止添加文本，如果没有更多空间
+                end
+              end
+            end
+            table.insert(newVirtText, { suffix, "Comment" }) -- 使用'Comment'高亮组
+            return newVirtText
+          end
+        end
 
         local newVirtText = {}
         local suffix = ("...%d "):format(endLnum - lnum)
@@ -142,8 +183,8 @@ return {
 
       local ftMap = {
         go = function(bufnr)
-          local err_folds = get_error_handling_folds(bufnr)
           local lsp_folds = require("ufo").getFolds(bufnr, "treesitter")
+          local err_folds = get_error_handling_folds(bufnr)
           for _, fold in ipairs(err_folds) do
             table.insert(lsp_folds, fold)
           end

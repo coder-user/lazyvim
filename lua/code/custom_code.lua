@@ -42,36 +42,27 @@ end
 
 -- go --
 
--- 折叠附近的错误行，从当前行开始，向下查找100行
-function M.go_fold_nearby_100_errors()
-  local current_line = vim.api.nvim_win_get_cursor(0)[1]
-  local search_end_line = current_line + 100
+function M.go_fold_all_errors()
   local total_lines = vim.api.nvim_buf_line_count(0)
-
-  if search_end_line > total_lines then
-    search_end_line = total_lines
-  end
   local error_patterns = { "if%s+[^;]+;[^;]+!= nil", ".+,%s+err%s*[:=]+%s+.+%([^%)]*%)" }
-
-  for line = current_line, search_end_line do
+  for line = 1, total_lines do
     local line_text = vim.api.nvim_buf_get_lines(0, line - 1, line, false)[1]
     for _, pattern in ipairs(error_patterns) do
       if line_text:find(pattern) then
         vim.api.nvim_exec(tostring(line) .. "foldclose", false)
       end
     end
-  end
-end
 
--- 折叠文档中所有包含特定错误模式的行
-function M.go_fold_all_errors()
-  local total_lines = vim.api.nvim_buf_line_count(0)
-  local error_patterns = { "if%s+[^;]+;[^;]+!= nil", ".+,%s+err%s*[:=]+%s+.+%([^%)]*%)" }
-
-  for line = 1, total_lines do
-    local line_text = vim.api.nvim_buf_get_lines(0, line - 1, line, false)[1]
-    for _, pattern in ipairs(error_patterns) do
-      if line_text:find(pattern) then
+    -- 添加单行 if 块的判断逻辑
+    if line_text:find("^%s*if.+{$") then
+      local isSingleReturnBlock = false
+      local lines = vim.api.nvim_buf_get_lines(0, line, line + 2, false)
+      if #lines >= 2 and lines[#lines]:match("^%s*}%s*$") then
+        if lines[1]:match("^%s*return%s+.+%s*$") then
+          isSingleReturnBlock = true
+        end
+      end
+      if isSingleReturnBlock then
         vim.api.nvim_exec(tostring(line) .. "foldclose", false)
       end
     end
