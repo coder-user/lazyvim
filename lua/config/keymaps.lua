@@ -26,18 +26,19 @@ set("n", "<localleader>uf", mecode.neovide_select_font, { desc = "Neovide Select
 
 -- ############## go ##############
 -- 设置 Go 文件专用快捷键，仅在当前缓冲区有效
-local function golang_key_map_set()
-  set("n", "<leader>le", mecode.go_fold_all_errors, { desc = "Go Err Fold  All", buffer = true })
-  set("n", "<leader>lI", mecode.go_import_package_complete, { desc = "Go Import Package", buffer = true })
-  set("n", "<leader>lg", mecode.go_git_format_changed_files, { desc = "Go Git Change Format", buffer = true })
-  set({ "n", "i", "v", "x" }, "<leader>ci", "<CMD>GoImports<CR>", { desc = "Go Code Import", buffer = true })
-  set({ "n", "i", "v", "x" }, "<A-S-CR>", require("code.telescope-customcmd").showGoCommandBar, { desc = "Customcmd Action", buffer = true })
-  set({ "n", "i", "v", "x" }, "<A-CR>", "<CMD>GoCodeAction<CR>", { desc = "Go Action", buffer = true })
+if vim.g.vscode ~= 1 then
+  local function golang_key_map_set()
+    set("n", "<leader>le", mecode.go_fold_all_errors, { desc = "Go Err Fold  All", buffer = true })
+    set("n", "<leader>lI", mecode.go_import_package_complete, { desc = "Go Import Package", buffer = true })
+    set("n", "<leader>lg", mecode.go_git_format_changed_files, { desc = "Go Git Change Format", buffer = true })
+    set({ "n", "i", "v", "x" }, "<leader>ci", "<CMD>GoImports<CR>", { desc = "Go Code Import", buffer = true })
+    set({ "n", "i", "v", "x" }, "<A-S-CR>", require("code.telescope-customcmd").showGoCommandBar, { desc = "Customcmd Action", buffer = true })
+    set({ "n", "i", "v", "x" }, "<A-CR>", "<CMD>GoCodeAction<CR>", { desc = "Go Action", buffer = true })
+  end
+  vim.api.nvim_create_augroup("GoFileType", { clear = true })
+  vim.api.nvim_create_autocmd("FileType", {
+    group = "GoFileType",
+    pattern = "go",
+    callback = golang_key_map_set,
+  })
 end
-
-vim.api.nvim_create_augroup("GoFileType", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-  group = "GoFileType",
-  pattern = "go",
-  callback = golang_key_map_set,
-})

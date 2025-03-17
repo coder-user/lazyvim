@@ -18,6 +18,8 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   end,
 })
 
+vim.b.autoformat = false
+
 -- -- 退出文件前进行格式化
 -- vim.api.nvim_create_autocmd("BufLeave", {
 --   pattern = "*.go",

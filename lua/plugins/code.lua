@@ -75,7 +75,7 @@ return {
       {
         "nvim-telescope/telescope-fzf-native.nvim",
         build = vim.fn.executable("cmake") == 1 and "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build"
-          or "make"
+          or "make",
         enabled = vim.fn.executable("make") == 1 or vim.fn.executable("cmake") == 1,
         config = function()
           LazyVim.on_load("telescope.nvim", function()
