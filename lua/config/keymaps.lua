@@ -41,4 +41,7 @@ if vim.g.vscode ~= 1 then
     pattern = "go",
     callback = golang_key_map_set,
   })
+  vim.keymap.set({ "n", "x", "i" }, "mc", function()
+    require("vscode-multi-cursor").addSelectionToNextFindMatch()
+  end)
 end
