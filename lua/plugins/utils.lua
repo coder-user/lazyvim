@@ -1,3 +1,4 @@
+
 return {
   -- im-select
   {
@@ -5,11 +6,14 @@ return {
     enabled = true,
     event = "VimEnter",
     config = function()
-      require("im_select").setup({})
+      require("im_select").setup({
+        default_command = "/opt/homebrew/bin/im-select",
+      })
     end,
   },
   {
     "nvim-treesitter/nvim-treesitter",
+    enabled = false,
     opts = {
       highlight = { enable = true },
       indent = {
@@ -29,6 +33,7 @@ return {
   {
     "s1n7ax/nvim-window-picker",
     name = "window-picker",
+    enabled = false,
     event = "VeryLazy",
     version = "2.*",
     config = function()

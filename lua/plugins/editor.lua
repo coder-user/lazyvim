@@ -1,10 +1,14 @@
+if true then
+  return {}
+end
+
 return {
   { "chrisgrieser/nvim-spider", lazy = true },
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
     opts = {
-      defaults = {
+      spec = {
         ["<leader>l"] = { name = "+format" },
         ["\\u"] = { name = "+ui" },
         ["<leader>t"] = { name = "+test" },

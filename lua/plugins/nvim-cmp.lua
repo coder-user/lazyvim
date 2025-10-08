@@ -1,3 +1,7 @@
+if true then
+  return {}
+end
+
 -- 命令行自动补全
 return {
   "hrsh7th/cmp-cmdline",

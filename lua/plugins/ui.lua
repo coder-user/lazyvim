@@ -1,9 +1,9 @@
-if false then
+if true then
   return {}
 end
 return {
   {
-    "echasnovski/mini.indentscope",
+    "nvim-mini/mini.indentscope",
     event = { "BufReadPre", "BufNewFile" },
     opts = {
       -- symbol = "▏",
